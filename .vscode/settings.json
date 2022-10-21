@@ -1,0 +1,16 @@
+{
+  "files.associations": {
+    "*.tcc": "cpp",
+    "optional": "cpp",
+    "algorithm": "cpp",
+    "istream": "cpp",
+    "streambuf": "cpp",
+    "xstring": "cpp",
+    "format": "cpp",
+    "xlocnum": "cpp",
+    "vector": "cpp",
+    "charconv": "cpp",
+    "chrono": "cpp",
+    "xhash": "cpp"
+  }
+}
