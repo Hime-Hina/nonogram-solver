@@ -17,17 +17,8 @@
 
 template <typename T>
 class Array3D {
-  template <typename U>
-  using IList = std::initializer_list<U>;
-
  public:
-  Array3D(size_t rows, size_t cols, size_t aisles)
-      : _rows(rows),
-        _cols(cols),
-        _aisles(aisles),
-        _offset(cols * aisles),
-        _arr(rows * cols * aisles) {}
-  Array3D(size_t rows, size_t cols, size_t aisles, const T &val)
+  Array3D(size_t rows, size_t cols, size_t aisles, const T &val = 0)
       : _rows(rows),
         _cols(cols),
         _aisles(aisles),
@@ -53,7 +44,38 @@ class Array3D {
   size_t rows() const { return _rows; }
   size_t cols() const { return _cols; }
   size_t aisle() const { return _aisles; }
-  T operator()(size_t row, size_t col, size_t aisle) const {
+  typename std::vector<T>::const_iterator operator()(size_t row) const {
+    return _arr.cbegin() + row * _offset;
+  }
+  typename std::vector<T>::const_iterator cend(size_t row) const {
+    return _arr.cbegin() + (row + 1) * _offset;
+  }
+
+  typename std::vector<T>::iterator operator()(size_t row) {
+    return _arr.begin() + row * _offset;
+  }
+  typename std::vector<T>::iterator end(size_t row) {
+    return _arr.begin() + (row + 1) * _offset;
+  }
+
+  typename std::vector<T>::const_iterator operator()(size_t row, size_t col) const {
+    return _arr.cbegin() + row * _offset + col * _aisles;
+  }
+  typename std::vector<T>::const_iterator cend(size_t row, size_t col) const {
+    return _arr.cbegin() + (row * _cols + col + 1) * _aisles;
+  }
+
+  typename std::vector<T>::iterator operator()(size_t row, size_t col) {
+    return _arr.begin() + row * _offset + col * _aisles;
+  }
+  typename std::vector<T>::iterator end(size_t row, size_t col) {
+    return _arr.begin() + (row * _cols + col + 1) * _aisles;
+  }
+
+  typename std::vector<T>::const_reference operator()(size_t row, size_t col, size_t aisle) const {
+    return _arr[row * _offset + col * _aisles + aisle];
+  }
+  typename std::vector<T>::reference operator()(size_t row, size_t col, size_t aisle) {
     return _arr[row * _offset + col * _aisles + aisle];
   }
 
@@ -64,7 +86,7 @@ class Array3D {
 };
 
 template <typename T>
-Array3D<T>::Array3D(Array3D::IList<Array3D::IList<Array3D::IList<T>>> list) : _rows(list.size()) {
+Array3D<T>::Array3D(IList<IList<IList<T>>> list) : _rows(list.size()) {
   _cols = 0;
   _aisles = 0;
   for (auto &l : list) {

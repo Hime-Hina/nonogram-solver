@@ -15,15 +15,12 @@
 #include <unordered_set>
 #include <vector>
 
+#include "Definitions.hpp"
+
 template <typename T>
 class Array2D {
-  template <typename U>
-  using IList = std::initializer_list<U>;
-
  public:
-  Array2D(size_t rows, size_t cols)
-      : _rows(rows), _cols(cols), _arr(rows * cols) {}
-  Array2D(size_t rows, size_t cols, const T &val)
+  Array2D(size_t rows, size_t cols, const T &val = 0)
       : _rows(rows), _cols(cols), _arr(rows * cols, val) {}
   Array2D(const Array2D &arr)
       : _rows(arr._rows), _cols(arr._cols), _arr(arr._arr) {}
@@ -36,7 +33,22 @@ class Array2D {
 
   size_t rows() const { return _rows; }
   size_t cols() const { return _cols; }
-  T operator()(size_t row, size_t col) const {
+  typename std::vector<T>::const_iterator operator()(size_t row) const {
+    return _arr.cbegin() + row * _cols;
+  }
+  typename std::vector<T>::const_iterator cend(size_t row) const {
+    return _arr.cbegin() + (row + 1) * _cols;
+  }
+  typename std::vector<T>::iterator operator()(size_t row) {
+    return _arr.begin() + row * _cols;
+  }
+  typename std::vector<T>::iterator end(size_t row) {
+    return _arr.begin() + (row + 1) * _cols;
+  }
+  typename std::vector<T>::const_reference operator()(size_t row, size_t col) const {
+    return _arr[row * _cols + col];
+  }
+  typename std::vector<T>::reference operator()(size_t row, size_t col) {
     return _arr[row * _cols + col];
   }
 
@@ -46,7 +58,7 @@ class Array2D {
 };
 
 template <typename T>
-Array2D<T>::Array2D(Array2D::IList<Array2D::IList<T>> list) : _rows(list.size()) {
+Array2D<T>::Array2D(IList<IList<T>> list) : _rows(list.size()) {
   _cols = 0;
   for (auto &l : list) {
     _cols = std::max(_cols, l.size());
