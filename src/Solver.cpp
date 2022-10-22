@@ -4,6 +4,8 @@
 
 #include "Solver.hpp"
 
+const char Solver::block_chars_[Solver::Block::LOOP_END + 1];
+
 bool Solver::Solve() {
   if (!Initialize_()) {
     std::cout
@@ -75,7 +77,7 @@ void Solver::Print(bool show_descriptions) {
     4: the main board of nonogram
   */
   // initialize
-  size_t total_row, total_col;
+  std::size_t total_row, total_col;
   if (show_descriptions) {
     total_row = board_size_[Line::ROW] + max_description_lens_[Line::COL];
     total_col = board_size_[Line::COL] + max_description_lens_[Line::ROW];
@@ -174,7 +176,7 @@ template <typename T>
 int Solver::ParseLine_(std::string l,
                        typename std::vector<T>::iterator begin,
                        typename std::vector<T>::iterator end,
-                       size_t assign_from) {
+                       std::size_t assign_from) {
   begin += assign_from - 1;
   if (begin >= end) return 0;
 
@@ -301,7 +303,7 @@ bool Solver::Check_(Solver::Pos pos) {
       int block_type;
       if (line == Line::ROW) {
         block_type = gram_(pp[line], i);
-      } else if (line == Line::COL) {
+      } else { // line == Line::COL
         block_type = gram_(i, pp[line]);
       }
       if (block_type != Block::UNKNOWN) {

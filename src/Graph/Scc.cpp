@@ -6,7 +6,7 @@
 
 namespace Graph {
 const SCC &SCC::operator()(const AdjacencyList &g) {
-  size_t tot = g.total_v();
+  std::size_t tot = g.total_v();
   int time_stamp = 0;
   Flags is_in_stk(tot, false);
   iStack stk;

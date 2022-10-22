@@ -5,20 +5,12 @@
 #ifndef NONOGRAM_INCLUDES_UTILITIES_ARRAY3D_HPP_
 #define NONOGRAM_INCLUDES_UTILITIES_ARRAY3D_HPP_
 
-#include <algorithm>
-#include <array>
-#include <chrono>
-#include <iostream>
-#include <memory>
-#include <numeric>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
+#include "Definitions.hpp"
 
 template <typename T>
 class Array3D {
  public:
-  Array3D(size_t rows, size_t cols, size_t aisles, const T &val = 0)
+  Array3D(std::size_t rows, std::size_t cols, std::size_t aisles, const T &val = 0)
       : _rows(rows),
         _cols(cols),
         _aisles(aisles),
@@ -41,47 +33,47 @@ class Array3D {
   Array3D &operator=(const Array3D &arr);
   Array3D &operator=(Array3D &&arr) noexcept;
 
-  size_t rows() const { return _rows; }
-  size_t cols() const { return _cols; }
-  size_t aisle() const { return _aisles; }
-  typename std::vector<T>::const_iterator operator()(size_t row) const {
+  std::size_t rows() const { return _rows; }
+  std::size_t cols() const { return _cols; }
+  std::size_t aisle() const { return _aisles; }
+  typename std::vector<T>::const_iterator operator()(std::size_t row) const {
     return _arr.cbegin() + row * _offset;
   }
-  typename std::vector<T>::const_iterator cend(size_t row) const {
+  typename std::vector<T>::const_iterator cend(std::size_t row) const {
     return _arr.cbegin() + (row + 1) * _offset;
   }
 
-  typename std::vector<T>::iterator operator()(size_t row) {
+  typename std::vector<T>::iterator operator()(std::size_t row) {
     return _arr.begin() + row * _offset;
   }
-  typename std::vector<T>::iterator end(size_t row) {
+  typename std::vector<T>::iterator end(std::size_t row) {
     return _arr.begin() + (row + 1) * _offset;
   }
 
-  typename std::vector<T>::const_iterator operator()(size_t row, size_t col) const {
+  typename std::vector<T>::const_iterator operator()(std::size_t row, std::size_t col) const {
     return _arr.cbegin() + row * _offset + col * _aisles;
   }
-  typename std::vector<T>::const_iterator cend(size_t row, size_t col) const {
+  typename std::vector<T>::const_iterator cend(std::size_t row, std::size_t col) const {
     return _arr.cbegin() + (row * _cols + col + 1) * _aisles;
   }
 
-  typename std::vector<T>::iterator operator()(size_t row, size_t col) {
+  typename std::vector<T>::iterator operator()(std::size_t row, std::size_t col) {
     return _arr.begin() + row * _offset + col * _aisles;
   }
-  typename std::vector<T>::iterator end(size_t row, size_t col) {
+  typename std::vector<T>::iterator end(std::size_t row, std::size_t col) {
     return _arr.begin() + (row * _cols + col + 1) * _aisles;
   }
 
-  typename std::vector<T>::const_reference operator()(size_t row, size_t col, size_t aisle) const {
+  typename std::vector<T>::const_reference operator()(std::size_t row, std::size_t col, std::size_t aisle) const {
     return _arr[row * _offset + col * _aisles + aisle];
   }
-  typename std::vector<T>::reference operator()(size_t row, size_t col, size_t aisle) {
+  typename std::vector<T>::reference operator()(std::size_t row, std::size_t col, std::size_t aisle) {
     return _arr[row * _offset + col * _aisles + aisle];
   }
 
  private:
-  size_t _rows, _cols, _aisles;
-  size_t _offset;
+  std::size_t _rows, _cols, _aisles;
+  std::size_t _offset;
   std::vector<T> _arr;
 };
 

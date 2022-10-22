@@ -7,7 +7,7 @@
 
 #include "Definitions.hpp"
 #include "Utilities/DisjointSet.h"
-#include "Edge.h"
+#include "Edge.hpp"
 
 namespace Graph {
 
@@ -28,7 +28,6 @@ class AdjacencyList {
   const iArray &degrees_out() const { return d_out_; }
 
   AdjacencyList &AddEdge(const Edge &e);
-  AdjacencyList &AddEdge(Edge &&e);
   AdjacencyList &AddEdge(int u, int v, int weight = 1, int capacity = 0, int rev = -1);
 
   void Print() const;

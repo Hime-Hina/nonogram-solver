@@ -5,7 +5,6 @@
 #ifndef NONOGRAM_INCLUDES_DEFINITIONS_HPP_
 #define NONOGRAM_INCLUDES_DEFINITIONS_HPP_
 
-#include <cstddef>
 #include <cstdio>
 #include <cstring>
 #include <iomanip>
@@ -16,7 +15,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Graph/Edge.h"
+#include "Graph/Edge.hpp"
 
 #define ITERATE_VERTICES_TMP(u, tot) for (int u = 0; u < (tot); ++u)
 
@@ -38,7 +37,7 @@ using IList = std::initializer_list<U>;
 
 using Flags = std::vector<bool>;
 using iArray = std::vector<int>;
-using szArray = std::vector<size_t>;
+using szArray = std::vector<std::size_t>;
 using iStack = std::stack<int>;
 using iQueue = std::queue<int>;
 using iMapi = std::unordered_map<int, int>;

@@ -21,7 +21,7 @@ class Solver {
     int row, col;
   };
 
-  Solver(size_t rows, size_t cols)
+  Solver(std::size_t rows, std::size_t cols)
       : total_blocks_(rows * cols), board_size_{rows, cols}, gram_(rows + 1, cols + 1),
         gram_for_printing_(rows + (cols + 1) / 2, cols + (rows + 1) / 2),
         max_description_lens_{0, 0},
@@ -50,10 +50,9 @@ class Solver {
   constexpr static const char *_description_number_digits =
       "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-  size_t total_blocks_;
-  size_t board_size_[Line::LOOP_END];
+  std::size_t total_blocks_;
+  std::size_t board_size_[Line::LOOP_END];
 
-//  int gram_(MAX_SIZE + 1, MAX_SIZE + 1);  // 1-indexed
   constexpr static const char block_chars_[Block::LOOP_END + 1] = {'.', '@', '?'};
   Array2D<int> gram_;
   Array2D<char> gram_for_printing_;
@@ -95,7 +94,7 @@ class Solver {
   static int ParseLine_(std::string l,
                         typename std::vector<T>::iterator begin,
                         typename std::vector<T>::iterator end,
-                        size_t assign_from = 0);
+                        std::size_t assign_from = 0);
 
   bool Initialize_();
 

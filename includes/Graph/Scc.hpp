@@ -13,13 +13,13 @@ class SCC {
  public:
   const SCC &operator()(const AdjacencyList &g);
 
-  size_t scc_counter() const { return scc_counter_; }
+  std::size_t scc_counter() const { return scc_counter_; }
   int belongs(int u) const { return belongs_[u]; }
-  size_t size_of(int component) const { return size_of_[component]; }
+  std::size_t size_of(int component) const { return size_of_[component]; }
   bool IsConnected(int u, int v) { return djs_.FindRoot(u) == djs_.FindRoot(v); }
 
  protected:
-  size_t scc_counter_;
+  std::size_t scc_counter_;
   iArray dfn_, low_, belongs_, size_of_;
   DisjointSet djs_;
 

@@ -11,12 +11,6 @@ AdjacencyList &AdjacencyList::AddEdge(const Edge &e) {
   return *this;
 }
 
-AdjacencyList &AdjacencyList::AddEdge(Edge &&e) {
-  g_[e.from].emplace_back(std::move(e));
-  ++d_out_[e.from], ++d_in_[e.to];
-  return *this;
-}
-
 AdjacencyList &AdjacencyList::AddEdge(int u, int v, int weight, int capacity, int rev) {
   g_[u].emplace_back(Edge(u, v, weight, capacity, rev));
   ++d_out_[u], ++d_in_[v];
