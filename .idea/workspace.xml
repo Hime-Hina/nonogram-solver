@@ -11,7 +11,9 @@
   </component>
   <component name="CMakeRunConfigurationManager">
     <generated>
-      <config projectName="nonogram" targetName="test1" />
+      <config projectName="nonogram" targetName="solver" />
+      <config projectName="nonogram" targetName="TestMaxFlow" />
+      <config projectName="nonogram" targetName="TestArray2D" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -20,8 +22,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a1ebc95-220b-46f1-a863-76cc87c8b74a" name="变更" comment="第一次提交">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="9a1ebc95-220b-46f1-a863-76cc87c8b74a" name="变更" comment="更新CMakeLists">
+      <change afterPath="$PROJECT_DIR$/.idea/codestream.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/Utilities/Array2D.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Utilities/Array2D.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nonogram.md" beforeDir="false" afterPath="$PROJECT_DIR$/doc/nonogram.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/TestArray2D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/TestArray2D.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +70,8 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ShowUsagesActions.previewPropertyKey": "true",
     "WebServerToolWindowFactoryState": "false",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
@@ -71,25 +79,45 @@
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.general",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
     "settings.editor.splitter.proportion": "0.26601425"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\WorkingSpace\nonogram\src\Utilities" />
-      <recent name="D:\WorkingSpace\nonogram\includes\Utilities" />
-      <recent name="D:\WorkingSpace\nonogram\src\Graph" />
       <recent name="D:\WorkingSpace\nonogram\src" />
-      <recent name="D:\WorkingSpace\nonogram\includes\Graph" />
+      <recent name="D:\WorkingSpace\nonogram\includes" />
+      <recent name="D:\WorkingSpace\nonogram\src\test" />
+      <recent name="D:\WorkingSpace\nonogram\doc" />
+      <recent name="D:\WorkingSpace\nonogram\src\Utilities" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="test1" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="nonogram" TARGET_NAME="test1" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="nonogram" RUN_TARGET_NAME="test1">
+  <component name="RunManager" selected="CMake 应用程序.TestArray2D">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestArray2D" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="nonogram" TARGET_NAME="TestArray2D" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="nonogram" RUN_TARGET_NAME="TestArray2D">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TestMaxFlow" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="nonogram" TARGET_NAME="TestMaxFlow" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="nonogram" RUN_TARGET_NAME="TestMaxFlow">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="solver" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="nonogram" TARGET_NAME="solver" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="nonogram" RUN_TARGET_NAME="solver">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake 应用程序.solver" />
+      <item itemvalue="CMake 应用程序.TestArray2D" />
+      <item itemvalue="CMake 应用程序.TestMaxFlow" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -107,7 +135,9 @@
       <workItem from="1666350494140" duration="56000" />
       <workItem from="1666350562381" duration="4049000" />
       <workItem from="1666354667679" duration="316000" />
-      <workItem from="1666355062872" duration="142000" />
+      <workItem from="1666355062872" duration="3650000" />
+      <workItem from="1666371430209" duration="17049000" />
+      <workItem from="1666464937825" duration="13032000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <created>1666354025656</created>
@@ -123,7 +153,84 @@
       <option name="project" value="LOCAL" />
       <updated>1666354043798</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="第一次提交">
+      <created>1666355220788</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1666355220788</updated>
+    </task>
+    <task id="LOCAL-00004" summary="第一次提交">
+      <created>1666355234575</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1666355234575</updated>
+    </task>
+    <task id="LOCAL-00005" summary="添加.gitignore">
+      <created>1666355310228</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1666355310228</updated>
+    </task>
+    <task id="LOCAL-00006" summary="README">
+      <created>1666355487324</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1666355487324</updated>
+    </task>
+    <task id="LOCAL-00007" summary="添加.gitignore模板">
+      <created>1666355680648</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1666355680648</updated>
+    </task>
+    <task id="LOCAL-00008" summary="将求解器分离为单独的类，并使用动态数组。">
+      <created>1666466560981</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1666466560981</updated>
+    </task>
+    <task id="LOCAL-00009" summary="索引不完全时返回迭代器；将一些通用模板类型抽出。">
+      <created>1666466784423</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1666466784423</updated>
+    </task>
+    <task id="LOCAL-00010" summary="修改一些声明定义；将size_t替换为std::size_t。">
+      <created>1666478629804</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1666478629804</updated>
+    </task>
+    <task id="LOCAL-00011" summary="添加测试类；添加二维数组和最大流的测试；二维数组的容器构造函数泛型化">
+      <created>1666478804505</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1666478804505</updated>
+    </task>
+    <task id="LOCAL-00012" summary="更新">
+      <created>1666478838851</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1666478838851</updated>
+    </task>
+    <task id="LOCAL-00013" summary="更新CMakeLists">
+      <created>1666479022521</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1666479022521</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -142,7 +249,16 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="第一次提交" />
-    <option name="LAST_COMMIT_MESSAGE" value="第一次提交" />
+    <MESSAGE value="添加.gitignore" />
+    <MESSAGE value="README" />
+    <MESSAGE value="添加.gitignore模板" />
+    <MESSAGE value="将求解器分离为单独的类，并使用动态数组。" />
+    <MESSAGE value="索引不完全时返回迭代器；将一些通用模板类型抽出。" />
+    <MESSAGE value="修改一些声明定义；将size_t替换为std::size_t。" />
+    <MESSAGE value="添加测试类；添加二维数组和最大流的测试；二维数组的容器构造函数泛型化" />
+    <MESSAGE value="更新" />
+    <MESSAGE value="更新CMakeLists" />
+    <option name="LAST_COMMIT_MESSAGE" value="更新CMakeLists" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
