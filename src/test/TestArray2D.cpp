@@ -40,7 +40,7 @@ bool TestInitContainerConstructor_vector() {
     }
   }
 
-  Array2D<int, std::vector> arr(a);
+  Array2D<int> arr(a);
 
   bool res = arr.rows() == rows && arr.cols() == cols;
   for (int i = 0; i < rows; ++i) {

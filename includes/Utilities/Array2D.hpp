@@ -7,7 +7,7 @@
 
 #include "Definitions.hpp"
 
-template <typename T, template <class, class...> class InitContainer = std::initializer_list>
+template <typename T>
 class Array2D {
  public:
   Array2D(std::size_t rows, std::size_t cols, const T &val = 0)
@@ -16,6 +16,7 @@ class Array2D {
       : _rows(arr._rows), _cols(arr._cols), _arr(arr._arr) {}
   Array2D(Array2D &&arr) noexcept
       : _rows(arr._rows), _cols(arr._cols), _arr(std::move(arr._arr)) {}
+  template <template <class, class...> class InitContainer = std::initializer_list>
   explicit Array2D(InitContainer<InitContainer<T>> container);
 
   Array2D &operator=(const Array2D &arr);
@@ -67,22 +68,23 @@ class Array2D {
   std::vector<T> _arr;
 };
 
-template <typename T, template <class, class...> class InitContainer>
-Array2D<T, InitContainer>::Array2D(InitContainer<InitContainer<T>> container)
+template <typename T>
+template <template <class, class...> class InitContainer>
+Array2D<T>::Array2D(InitContainer<InitContainer<T>> container)
     : _rows(container.size()), _cols(0) {
   _arr = FlattenToArray_(container, _cols);
 }
 
-template <typename T, template <class, class...> class InitContainer>
-Array2D<T, InitContainer> &Array2D<T, InitContainer>::operator=(const Array2D &arr) {
+template <typename T>
+Array2D<T> &Array2D<T>::operator=(const Array2D &arr) {
   _rows = arr._rows;
   _cols = arr._cols;
   _arr = arr._arr;
   return *this;
 }
 
-template <typename T, template <class, class...> class InitContainer>
-Array2D<T, InitContainer> &Array2D<T, InitContainer>::operator=(Array2D &&arr) noexcept {
+template <typename T>
+Array2D<T> &Array2D<T>::operator=(Array2D &&arr) noexcept {
   _rows = arr._rows;
   _cols = arr._cols;
   _arr = std::move(arr._arr);
