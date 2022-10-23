@@ -18,7 +18,6 @@ class Array2D {
       : _rows(arr._rows), _cols(arr._cols), _arr(arr._arr) {}
   Array2D(Array2D &&arr) noexcept
       : _rows(arr._rows), _cols(arr._cols), _arr(std::move(arr._arr)) {}
-
   template <
       typename InitContainer,
       std::enable_if_t<
@@ -33,9 +32,30 @@ class Array2D {
     if (_arr.size() != _rows * _cols)
       throw std::invalid_argument("The scale does not match the size of container!");
   }
-
-  template <template <class, class...> class InitContainer = std::initializer_list>
-  explicit Array2D(InitContainer<InitContainer<T>> container)
+  template <
+      class InitArray,
+      std::enable_if_t<
+          std::conjunction_v<
+              std::is_array<InitArray>,
+              std::is_same<
+                  std::integral_constant<std::size_t, std::rank_v<InitArray>>,
+                  std::integral_constant<std::size_t, 2>
+              >
+          >,
+          bool
+      > = true
+  >
+  explicit Array2D(const InitArray &array)
+      : _rows(std::extent_v<InitArray, 0>), _cols(std::extent_v<InitArray, 1>) {
+    _arr = FlattenToArray_(array);
+  }
+  template <
+      template <class...> class InitContainer,
+      std::enable_if_t<
+          is_iterable_v<InitContainer<InitContainer<T>>>, bool
+      > = true
+  >
+  explicit Array2D(const InitContainer<InitContainer<T>> &container)
       : _rows(container.size()), _cols(0) {
     _arr = FlattenToArray_(container, _cols);
   }
@@ -86,12 +106,37 @@ class Array2D {
   }
 
   template <
-      class Iterable,
+      class Array,
       std::enable_if_t<
-          is_iterable_v<Iterable>, bool
+          std::conjunction_v<
+              std::is_array<Array>,
+              std::is_same<
+                  std::integral_constant<std::size_t, std::rank_v<Array>>,
+                  std::integral_constant<std::size_t, 2>
+              >
+          >,
+          bool
       > = true
   >
-  static std::vector<T> FlattenToArray_(const Iterable &iterable, size_t &max_cols) {
+  static std::vector<T> FlattenToArray_(const Array &array) {
+    std::size_t rows = std::extent_v<Array, 0>, cols = std::extent_v<Array, 1>;
+    std::vector<T> arr(rows * cols);
+
+    for (std::size_t i = 0; i < rows; ++i) {
+      for (std::size_t j = 0; j < cols; ++j) {
+        arr[i * cols + j] = array[i][j];
+      }
+    }
+
+    return arr;
+  }
+  template <
+      template <class ...> class Iterable,
+      std::enable_if_t<
+          is_iterable_v<Iterable<Iterable<T>>>, bool
+      > = true
+  >
+  static std::vector<T> FlattenToArray_(const Iterable<Iterable<T>> &iterable, size_t &max_cols) {
     std::vector<T> arr;
 
     std::size_t rows = iterable.size();

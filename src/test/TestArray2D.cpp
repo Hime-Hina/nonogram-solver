@@ -45,12 +45,59 @@ bool TestInitContainerConstructor_initializer_list() {
       {10, 11, 12, 13, 14},
       {15, 16, 17, 18, 19},
   };
+  int aa[4][5] = {
+      {0, 1, 2, 3, 4},
+      {5, 6, 7, 8, 9},
+      {10, 11, 12, 13, 14},
+      {15, 16, 17, 18, 19},
+  };
   Array2D<int> arr(il);
 
   bool res = arr.rows() == il.size() && arr.cols() == 5;
   for (int i = 0; i < arr.rows(); ++i) {
     for (int j = 0; j < arr.cols(); ++j) {
       res = res && (i * arr.cols() + j == arr(i, j));
+    }
+  }
+  return res;
+}
+
+bool TestInitContainerConstructor_array0() {
+  int a[][5] = {
+      {0, 1, 2, 3, 4},
+      {5, 6, 7, 8, 9},
+      {10, 11, 12, 13, 14},
+      {15, 16, 17, 18, 19},
+  };
+  Array2D<int> arr(a);
+
+  bool res = arr.rows() == std::extent_v<decltype(a), 0> && arr.cols() == std::extent_v<decltype(a), 1>;
+  for (int i = 0; i < arr.rows(); ++i) {
+    for (int j = 0; j < arr.cols(); ++j) {
+      res = res && (i * arr.cols() + j == arr(i, j));
+    }
+  }
+  return res;
+}
+
+bool TestInitContainerConstructor_array1() {
+  constexpr int rows = 512, cols = 512;
+  int a[rows][cols];
+
+  std::default_random_engine engine(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+  std::uniform_int_distribution<int> dist(INT_MIN, INT_MAX);
+  for (auto &i : a) {
+    for (int &j : i) {
+      j = dist(engine);
+    }
+  }
+
+  Array2D<int> arr(a);
+
+  bool res = arr.rows() == rows && arr.cols() == cols;
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      res = res && (a[i][j] == arr(i, j));
     }
   }
   return res;
@@ -164,6 +211,8 @@ int main() {
       .AddTest(TestRowsAndCols)
       .AddTest(TestFlattenToArray)
       .AddTest(TestInitContainerConstructor_initializer_list)
+      .AddTest(TestInitContainerConstructor_array0)
+      .AddTest(TestInitContainerConstructor_array1)
       .AddTest(TestInitContainerConstructor_vector)
       .AddTest(TestInitContainerConstructor_set)
       .AddTest(TestInitContainerConstructor_map)

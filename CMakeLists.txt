@@ -30,6 +30,7 @@ set(SOURCES
     src/Solver.cpp
     )
 
+add_executable(Test src/test/Test.cpp)
 add_executable(TestMaxFlow src/test/TestMaxFlow.cpp ${SOURCES} ${HEADERS})
 add_executable(TestArray2D src/test/TestArray2D.cpp ${SOURCES} ${HEADERS})
 add_executable(TestArray3D src/test/TestArray3D.cpp ${SOURCES} ${HEADERS})
