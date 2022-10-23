@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 project(nonogram)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 include_directories(includes)
 
@@ -17,6 +17,7 @@ set(HEADERS
     includes/Utilities/DisjointSet.h
     includes/Utilities/Timer.h
     includes/Solver.hpp
+    includes/Utilities/UtilityTemplates.hpp
     )
 
 set(SOURCES
@@ -31,4 +32,5 @@ set(SOURCES
 
 add_executable(TestMaxFlow src/test/TestMaxFlow.cpp ${SOURCES} ${HEADERS})
 add_executable(TestArray2D src/test/TestArray2D.cpp ${SOURCES} ${HEADERS})
+add_executable(TestArray3D src/test/TestArray3D.cpp ${SOURCES} ${HEADERS})
 add_executable(solver src/main.cpp ${SOURCES} ${HEADERS})

@@ -5,7 +5,9 @@
 #ifndef NONOGRAM_INCLUDES_UTILITIES_ARRAY2D_HPP_
 #define NONOGRAM_INCLUDES_UTILITIES_ARRAY2D_HPP_
 
+#include <map>
 #include "Definitions.hpp"
+#include "UtilityTemplates.hpp"
 
 template <typename T>
 class Array2D {
@@ -16,26 +18,59 @@ class Array2D {
       : _rows(arr._rows), _cols(arr._cols), _arr(arr._arr) {}
   Array2D(Array2D &&arr) noexcept
       : _rows(arr._rows), _cols(arr._cols), _arr(std::move(arr._arr)) {}
-  template <template <class, class...> class InitContainer = std::initializer_list>
-  explicit Array2D(InitContainer<InitContainer<T>> container);
 
-  Array2D &operator=(const Array2D &arr);
-  Array2D &operator=(Array2D &&arr) noexcept;
+  template <
+      typename InitContainer,
+      std::enable_if_t<
+          std::conjunction_v<
+              is_container<std::remove_reference_t<InitContainer>>,
+              std::is_same<T, typename std::remove_reference_t<InitContainer>::value_type>
+          >, bool
+      > = true
+  >
+  Array2D(std::size_t rows, std::size_t cols, InitContainer &&container)
+      : _rows(rows), _cols(cols), _arr(container.begin(), container.end()) {
+    if (_arr.size() != _rows * _cols)
+      throw std::invalid_argument("The scale does not match the size of container!");
+  }
+
+  template <template <class, class...> class InitContainer = std::initializer_list>
+  explicit Array2D(InitContainer<InitContainer<T>> container)
+      : _rows(container.size()), _cols(0) {
+    _arr = FlattenToArray_(container, _cols);
+  }
+
+  Array2D<T> &operator=(const Array2D &arr) {
+    _rows = arr._rows;
+    _cols = arr._cols;
+    _arr = arr._arr;
+    return *this;
+  }
+
+  Array2D<T> &operator=(Array2D &&arr) noexcept {
+    _rows = arr._rows;
+    _cols = arr._cols;
+    _arr = std::move(arr._arr);
+    return *this;
+  }
 
   std::size_t rows() const { return _rows; }
   std::size_t cols() const { return _cols; }
-  std::vector<T> arr() const { return _arr; }
-  typename std::vector<T>::const_iterator operator()(std::size_t row) const {
+
+  typename std::vector<T>::const_iterator cbegin(std::size_t row = 0) const {
     return _arr.cbegin() + row * _cols;
   }
-  typename std::vector<T>::const_iterator cend(std::size_t row) const {
+  typename std::vector<T>::const_iterator cend(std::size_t row = 0) const {
     return _arr.cbegin() + (row + 1) * _cols;
   }
-  typename std::vector<T>::iterator operator()(std::size_t row) {
+  typename std::vector<T>::iterator begin(std::size_t row = 0) {
     return _arr.begin() + row * _cols;
   }
-  typename std::vector<T>::iterator end(std::size_t row) {
+  typename std::vector<T>::iterator end(std::size_t row = 0) {
     return _arr.begin() + (row + 1) * _cols;
+  }
+  typename std::vector<T>::iterator at(std::size_t index = 0) {
+    return _arr.begin() + index;
   }
   typename std::vector<T>::const_reference operator()(std::size_t row, std::size_t col) const {
     return _arr[row * _cols + col];
@@ -43,10 +78,20 @@ class Array2D {
   typename std::vector<T>::reference operator()(std::size_t row, std::size_t col) {
     return _arr[row * _cols + col];
   }
+  typename std::vector<T>::const_reference operator()(std::size_t index = 0) const {
+    return _arr[index];
+  }
+  typename std::vector<T>::reference operator()(std::size_t index = 0) {
+    return _arr[index];
+  }
 
-  template <class Iterable>
-  static auto FlattenToArray_(const Iterable &iterable, std::size_t &max_cols)
-  -> decltype(iterable.size(), iterable.begin(), iterable.end(), std::vector<T>{}) {
+  template <
+      class Iterable,
+      std::enable_if_t<
+          is_iterable_v<Iterable>, bool
+      > = true
+  >
+  static std::vector<T> FlattenToArray_(const Iterable &iterable, size_t &max_cols) {
     std::vector<T> arr;
 
     std::size_t rows = iterable.size();
@@ -67,28 +112,5 @@ class Array2D {
   std::size_t _rows, _cols;
   std::vector<T> _arr;
 };
-
-template <typename T>
-template <template <class, class...> class InitContainer>
-Array2D<T>::Array2D(InitContainer<InitContainer<T>> container)
-    : _rows(container.size()), _cols(0) {
-  _arr = FlattenToArray_(container, _cols);
-}
-
-template <typename T>
-Array2D<T> &Array2D<T>::operator=(const Array2D &arr) {
-  _rows = arr._rows;
-  _cols = arr._cols;
-  _arr = arr._arr;
-  return *this;
-}
-
-template <typename T>
-Array2D<T> &Array2D<T>::operator=(Array2D &&arr) noexcept {
-  _rows = arr._rows;
-  _cols = arr._cols;
-  _arr = std::move(arr._arr);
-  return *this;
-}
 
 #endif //NONOGRAM_INCLUDES_UTILITIES_ARRAY2D_HPP_

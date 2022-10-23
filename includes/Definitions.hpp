@@ -25,11 +25,6 @@
 
 constexpr const int inf = 0x3f3f3f3f;
 
-template <typename T, typename Category = std::random_access_iterator_tag>
-using Iterator = std::iterator<Category, T>;
-template <typename T, typename Category = std::random_access_iterator_tag>
-using IteratorRange = std::pair<Iterator<T, Category>, Iterator<T, Category>>;
-
 template <typename T>
 using Array = std::vector<T>;
 template <typename U>
