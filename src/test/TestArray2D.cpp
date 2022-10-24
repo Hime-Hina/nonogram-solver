@@ -10,32 +10,9 @@
 #include "Utilities/Array2D.hpp"
 
 bool TestRowsAndCols() {
-  Array2D<int> arr(329, 932, 9);
+  int a = 100;
+  Array2D<int> arr(329, 932, a);
   return arr.rows() == 329 && arr.cols() == 932;
-}
-
-bool TestFlattenToArray() {
-  int rows = 512, cols = 512;
-  std::vector<std::vector<int>> a(rows, std::vector<int>(cols, 0));
-
-  std::default_random_engine engine(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-  std::uniform_int_distribution<int> dist(INT_MIN, INT_MAX);
-  for (int i = 0; i < rows; ++i) {
-    for (int j = 0; j < cols; ++j) {
-      a[i][j] = dist(engine);
-    }
-  }
-
-  std::size_t max_cols = 0;
-  std::vector<int> arr = Array2D<int>::FlattenToArray_(a, max_cols);
-
-  bool res = arr.size() == rows * cols;
-  for (int i = 0; i < rows; ++i) {
-    for (int j = 0; j < cols; ++j) {
-      res = res && (a[i][j] == arr[i * cols + j]);
-    }
-  }
-  return res;
 }
 
 bool TestInitContainerConstructor_initializer_list() {
@@ -74,7 +51,7 @@ bool TestInitContainerConstructor_array0() {
   bool res = arr.rows() == std::extent_v<decltype(a), 0> && arr.cols() == std::extent_v<decltype(a), 1>;
   for (int i = 0; i < arr.rows(); ++i) {
     for (int j = 0; j < arr.cols(); ++j) {
-      res = res && (i * arr.cols() + j == arr(i, j));
+      res = res && (a[i][j] == arr(i, j));
     }
   }
   return res;
@@ -209,7 +186,6 @@ int main() {
 
   tester
       .AddTest(TestRowsAndCols)
-      .AddTest(TestFlattenToArray)
       .AddTest(TestInitContainerConstructor_initializer_list)
       .AddTest(TestInitContainerConstructor_array0)
       .AddTest(TestInitContainerConstructor_array1)

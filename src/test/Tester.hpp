@@ -23,27 +23,29 @@ class Tester {
     int i = 1;
     int counter_passed = 0;
 
-    std::cout << test_name_ << ": Total " << test_funcs_.size() << " tests.\n";
+    std::cout << test_name_ << ": Total " << test_funcs_.size() << " tests." << std::endl;
     for (auto &&f : test_funcs_) {
       std::cout << "Running test " << i << '/' << test_funcs_.size() << "... ";
+      std::cout.flush();
+
       try {
         if (f()) {
-          std::cout << "Passed.\n";
+          std::cout << "Passed." << std::endl;
           ++counter_passed;
         } else {
-          std::cout << "Failed.\n";
+          std::cout << "Failed." << std::endl;
         }
       } catch (const std::exception &e) {
-        std::cout << "\nException: " << e.what() << '\n';
+        std::cerr << "\nException: " << e.what() << std::endl;
         return counter_passed;
       } catch (const std::string &e) {
-        std::cout << "\nException: " << e << '\n';
+        std::cerr << "\nException: " << e << std::endl;
         return counter_passed;
       } catch (...) {
         std::exception_ptr ptr = std::current_exception();
-        std::cout << "\nException: "
+        std::cerr << "\nException: "
                   << (ptr != nullptr ? ptr.__cxa_exception_type()->name() : "null")
-                  << '\n';
+                  << std::endl;
       }
       ++i;
     }
