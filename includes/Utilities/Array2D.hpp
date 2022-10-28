@@ -76,6 +76,18 @@ class Array2D {
     }
   }
 
+  void resize(std::size_t rows, std::size_t cols) {
+    _rows = rows;
+    _cols = cols;
+    _arr.resize(rows * cols);
+  }
+
+  void assign(std::size_t rows, std::size_t cols, const T &val) {
+    _rows = rows;
+    _cols = cols;
+    _arr.assign(rows * cols, val);
+  }
+
   Array2D<T> &operator=(const Array2D &arr) {
     _rows = arr._rows;
     _cols = arr._cols;

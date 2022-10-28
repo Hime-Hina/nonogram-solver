@@ -278,6 +278,58 @@ bool TestIterators() {
   return true;
 }
 
+bool TestResizeAndAssign() {
+  constexpr int rows = 512, cols = 512, aisles = 30;
+  std::vector<std::vector<std::vector<int>>> a(
+      rows,
+      std::vector<std::vector<int>>(
+          cols,
+          std::vector<int>(
+              aisles, 0
+          )
+      )
+  );
+
+  std::default_random_engine engine(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+  std::uniform_int_distribution<int> dist(INT_MIN, INT_MAX);
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      for (int k = 0; k < aisles; ++k) {
+        a[i][j][k] = dist(engine);
+      }
+    }
+  }
+
+  Array3D<int> arr(a);
+
+  bool res = arr.rows() == rows && arr.cols() == cols && arr.aisles() == aisles;
+  if (!res) return false;
+
+  for (int i = 0; i < arr.rows(); ++i) {
+    for (int j = 0; j < arr.cols(); ++j) {
+      for (int k = 0; k < arr.aisles(); ++k) {
+        if (a[i][j][k] != arr(i, j, k)) return false;
+      }
+    }
+  }
+
+  int val = dist(engine);
+  arr.assign(12, 52, 32, val);
+  for (int i = 0; i < arr.rows(); ++i) {
+    for (int j = 0; j < arr.cols(); ++j) {
+      for (int k = 0; k < arr.aisles(); ++k) {
+        if (val != arr(i, j, k)) return false;
+      }
+    }
+  }
+
+  arr.resize(10, 35, 29);
+  res = arr.rows() == 10 && arr.cols() == 35 && arr.aisles() == 29;
+  if (!res) return false;
+
+  return true;
+}
+
 int main() {
   Tester tester("Array3D Tests");
 
@@ -290,6 +342,7 @@ int main() {
       .AddTest(TestInitContainerConstructor_set)
       .AddTest(TestInitContainerConstructor_map)
       .AddTest(TestIterators)
+      .AddTest(TestResizeAndAssign)
       .Run();
 
   return 0;

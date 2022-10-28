@@ -99,6 +99,22 @@ class Array3D {
     }
   }
 
+  void resize(std::size_t rows, std::size_t cols, std::size_t aisles) {
+    _rows = rows;
+    _cols = cols;
+    _aisles = aisles;
+    _offset = cols * aisles;
+    _arr.resize(rows * _offset);
+  }
+
+  void assign(std::size_t rows, std::size_t cols, std::size_t aisles, const T &val) {
+    _rows = rows;
+    _cols = cols;
+    _aisles = aisles;
+    _offset = cols * aisles;
+    _arr.assign(rows * _offset, val);
+  }
+
   Array3D<T> &operator=(const Array3D &arr) {
     _rows = arr._rows;
     _cols = arr._cols;

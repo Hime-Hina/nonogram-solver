@@ -31,12 +31,15 @@ bool TestInitContainerConstructor_initializer_list() {
   Array2D<int> arr(il);
 
   bool res = arr.rows() == il.size() && arr.cols() == 5;
+  if (!res) return false;
+
   for (int i = 0; i < arr.rows(); ++i) {
     for (int j = 0; j < arr.cols(); ++j) {
-      res = res && (i * arr.cols() + j == arr(i, j));
+      if (i * arr.cols() + j != arr(i, j)) return false;
     }
   }
-  return res;
+
+  return true;
 }
 
 bool TestInitContainerConstructor_array0() {
@@ -49,12 +52,15 @@ bool TestInitContainerConstructor_array0() {
   Array2D<int> arr(a);
 
   bool res = arr.rows() == std::extent_v<decltype(a), 0> && arr.cols() == std::extent_v<decltype(a), 1>;
+  if (!res) return false;
+
   for (int i = 0; i < arr.rows(); ++i) {
     for (int j = 0; j < arr.cols(); ++j) {
-      res = res && (a[i][j] == arr(i, j));
+      if (a[i][j] != arr(i, j)) return false;
     }
   }
-  return res;
+
+  return true;
 }
 
 bool TestInitContainerConstructor_array1() {
@@ -72,12 +78,15 @@ bool TestInitContainerConstructor_array1() {
   Array2D<int> arr(a);
 
   bool res = arr.rows() == rows && arr.cols() == cols;
+  if (!res) return false;
+
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
-      res = res && (a[i][j] == arr(i, j));
+      if (a[i][j] != arr(i, j)) return false;
     }
   }
-  return res;
+
+  return true;
 }
 
 bool TestInitContainerConstructor_vector() {
@@ -95,12 +104,15 @@ bool TestInitContainerConstructor_vector() {
   Array2D<int> arr(a);
 
   bool res = arr.rows() == rows && arr.cols() == cols;
+  if (!res) return false;
+
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
-      res = res && (a[i][j] == arr(i, j));
+      if (a[i][j] != arr(i, j)) return false;
     }
   }
-  return res;
+
+  return true;
 }
 
 bool TestInitContainerConstructor_set() {
@@ -119,12 +131,14 @@ bool TestInitContainerConstructor_set() {
 
   size_t i = 0;
   bool res = arr.rows() == rows && arr.cols() == cols;
+  if (!res) return false;
+
   for (auto &&el : a) {
     size_t row = i / cols, col = i % cols;
-    res = res && (el == arr(row, col));
+    if (el != arr(row, col)) return false;
     ++i;
   }
-  return res;
+  return true;
 }
 
 bool TestInitContainerConstructor_map() {
@@ -143,12 +157,14 @@ bool TestInitContainerConstructor_map() {
 
   size_t i = 0;
   bool res = arr.rows() == rows && arr.cols() == cols;
+  if (!res) return false;
+
   for (auto &&el : a) {
     size_t row = i / cols, col = i % cols;
-    res = res && (el == arr(row, col));
+    if (el != arr(row, col)) return false;
     ++i;
   }
-  return res;
+  return true;
 }
 
 bool TestIterators() {
@@ -167,18 +183,59 @@ bool TestIterators() {
   const Array2D<int> carr(a);
 
   bool res = arr.rows() == rows && arr.cols() == cols;
+  if (!res) return false;
+
   for (int i = 0; i < rows; ++i) {
-    res = res && (*arr.begin(i) == a[i][0] && *carr.cbegin(i) == a[i][0]);
-    res = res && (*(arr.end(i) - 1) == a[i][cols - 1]
-        && *(carr.cend(i) - 1) == a[i][cols - 1]);
+    if (*arr.begin(i) != a[i][0] || *carr.cbegin(i) != a[i][0]) return false;
+    if (*(arr.end(i) - 1) != a[i][cols - 1]
+        || *(carr.cend(i) - 1) != a[i][cols - 1])
+      return false;
   }
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
-      res = res && (a[i][j] == *arr.at(i * cols + j));
-      res = res && (a[i][j] == arr(i * cols + j));
+      if (a[i][j] != *arr.at(i * cols + j)) return false;
+      if (a[i][j] != arr(i * cols + j)) return false;
     }
   }
-  return res;
+
+  return true;
+}
+
+bool TestResizeAndAssign() {
+  int rows = 512, cols = 512;
+  std::vector<std::vector<int>> a(rows, std::vector<int>(cols, 0));
+
+  std::default_random_engine engine(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+  std::uniform_int_distribution<int> dist(INT_MIN, INT_MAX);
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      a[i][j] = dist(engine);
+    }
+  }
+
+  Array2D<int> arr(a);
+
+  bool res = arr.rows() == rows && arr.cols() == cols;
+  if (!res) return false;
+
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      if (a[i][j] != arr(i, j)) return false;
+    }
+  }
+
+  int val = dist(engine);
+  arr.assign(rows, cols, val);
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      if (val != arr(i, j)) return false;
+    }
+  }
+
+  arr.resize(10, 10);
+  if (arr.rows() != 10 || arr.cols() != 10) return false;
+
+  return true;
 }
 
 int main() {
@@ -193,6 +250,7 @@ int main() {
       .AddTest(TestInitContainerConstructor_set)
       .AddTest(TestInitContainerConstructor_map)
       .AddTest(TestIterators)
+      .AddTest(TestResizeAndAssign)
       .Run();
 
   return 0;
