@@ -2,15 +2,16 @@
 // Created by HimeHina on 2022/10/23.
 //
 
+#include <initializer_list>
+#include <algorithm>
+
 #include "Solver.hpp"
 
-const char Solver::block_chars_[Solver::Block::LOOP_END + 1];
-
 bool Solver::Solve() {
-  if (!Initialize_()) {
-    std::cout
-        << "The sum of row's sum does not equal to the sum of col's sum!\n";
-    std::cout << sum_line_sum_[0] << " != " << sum_line_sum_[1] << '\n';
+  try {
+    Initialize_();
+  } catch (const std::exception &e) {
+    std::cerr << e.what() << std::endl;
     return false;
   }
 
@@ -25,44 +26,69 @@ bool Solver::Solve() {
   }
 }
 
-void Solver::Input() {
-//    std::cin >> board_size_[Line::ROW] >> board_size_[Line::COL];
-//    total_blocks_ = board_size_[Line::ROW] * board_size_[Line::COL];
-
-  std::string input_line;
-  for (int line = Line::ROW; line < Line::LOOP_END; ++line) {
-    sum_line_sum_[line] = 0;
-
-    for (int i = 1; i <= board_size_[line]; ++i) {
-      while (
-          getline(std::cin, input_line),
-              (
-                  descriptions_(line, i, 0) =
-                      ParseLine_<int>(
-                          input_line,
-                          descriptions_(line, i),
-                          descriptions_.end(line, i),
-                          1
-                      )
-              ) > 0
-          );
-      int k = descriptions_(line, i, 0);
-      line_sum_(line, i) = 0;
-      line_upper_sum_(line, i) = k - 1;
-      max_description_lens_[line] = std::max(max_description_lens_[line], k);
-
-      for (int j = 1; j <= k; ++j) {
-        line_sum_(line, i) += descriptions_(line, i, j);
-        sum_line_sum_[line] += descriptions_(line, i, j);
-      }
-      line_upper_sum_(line, i) += line_sum_(line, i);
+void Solver::Print(bool show_descriptions, std::ostream &out) {
+  InitializeForPrinting_(show_descriptions);
+  // output to terminal
+  for (int i = 0; i < gram_for_printing_.rows(); ++i) {
+    for (int j = 0; j < gram_for_printing_.cols(); ++j) {
+      out << std::setw(2) << gram_for_printing_(i, j);
     }
+    out << '\n';
   }
-  std::cout << "I get a " << board_size_[Line::ROW] << " X "
-            << board_size_[Line::COL] << " nonogram.\n";
 }
 
-void Solver::Print(bool show_descriptions) {
+std::istream &operator>>(std::istream &in, Solver &solver) {
+  std::string input_line;
+  for (int line = Line::ROW; line < Line::LOOP_END; ++line) {
+    for (int i = 1; i <= solver.board_size_[line]; ++i) {
+      int k;
+      auto begin = solver.descriptions_.begin(line, i),
+          end = solver.descriptions_.end(line, i);
+      while (getline(in, input_line),
+          (k = Solver::ParseLine_(input_line, begin, end, 1)) <= 0);
+      solver.descriptions_(line, i, 0) = k;
+      if (2 * k > solver.board_size_[1 - line] + 1)
+        throw Solver::IncorrectDescriptions();
+    }
+  }
+  std::cout << "I get a " << solver.board_size_[Line::ROW] << " X "
+            << solver.board_size_[Line::COL] << " nonogram." << std::endl;
+
+  return in;
+}
+
+std::ostream &operator<<(std::ostream &out, Solver &solver) {
+  solver.Print(true, out);
+  return out;
+}
+
+template <
+    typename T, std::enable_if_t<is_iterator_v<T>, bool>
+>
+int Solver::ParseLine_(std::string l, T begin, T end, std::size_t assign_from) {
+  if (l.empty()) return 0;
+  if (assign_from > 0) begin += assign_from - 1;
+  if (begin >= end) return 0;
+
+  int n = 0;
+  int k = 0;
+
+  for (auto it = l.begin(),
+           ie = l.end(); it != ie; ++it) {
+    if (isdigit(*it)) {
+      n = 10 * n + (*it - '0');
+      if (it + 1 == ie || !isdigit(*(it + 1))) {
+        *(++begin) = n;
+        ++k;
+        if (begin >= end) break;
+      }
+    } else
+      n = 0;
+  }
+  return k;
+}
+
+void Solver::InitializeForPrinting_(bool show_descriptions) {
   /* the gram for printing consists of these areas:
     +-----------+
     |1|    2    |
@@ -85,18 +111,14 @@ void Solver::Print(bool show_descriptions) {
     total_row = board_size_[Line::ROW] + 1;
     total_col = board_size_[Line::COL] + 1;
   }
-  for (int row = 0; row < total_row; ++row) {
-    for (int col = 0; col < total_col; ++col) {
-      gram_for_printing_(row, col) = ' ';
-    }
-  }
+  gram_for_printing_.assign(total_row, total_col, ' ');
 
   if (show_descriptions) {
     // set area 2
     for (int i = 1; i <= board_size_[Line::COL]; ++i) {
       for (int j = 1; j <= descriptions_(Line::COL, i, 0); ++j) {
         int to_row = max_description_lens_[Line::COL] -
-            descriptions_(Line::COL, i, 0) + j - 1,
+                     descriptions_(Line::COL, i, 0) + j - 1,
             to_col = max_description_lens_[Line::ROW] + i - 1;
         gram_for_printing_(to_row, to_col) =
             _description_number_digits[descriptions_(Line::COL, i, j)];
@@ -108,7 +130,7 @@ void Solver::Print(bool show_descriptions) {
       for (int j = 1; j <= descriptions_(Line::ROW, i, 0); ++j) {
         int to_row = max_description_lens_[Line::COL] + i - 1,
             to_col = max_description_lens_[Line::ROW] -
-            descriptions_(Line::ROW, i, 0) + j - 1;
+                     descriptions_(Line::ROW, i, 0) + j - 1;
         gram_for_printing_(to_row, to_col) =
             _description_number_digits[descriptions_(Line::ROW, i, j)];
       }
@@ -137,113 +159,77 @@ void Solver::Print(bool show_descriptions) {
       gram_for_printing_(to_row, to_col) = block_chars_[gram_(i, j)];
     }
   }
-
-  // output to terminal
-  for (int i = 0; i < total_row; ++i) {
-    for (int j = 0; j < total_col; ++j) {
-      std::cout << std::setw(2) << gram_for_printing_(i, j);
-    }
-    std::cout << '\n';
-  }
-  std::cout << '\n';
-
-  // for (int i = 0; i <= board_size_[Line::ROW]; ++i) {
-  //   for (int j = 0; j <= board_size_[Line::COL]; ++j) {
-  //     std::cout << std::setw(2) << gram_(i, j) << ' ';
-  //   }
-  //   std::cout << '\n';
-  // }
-
-  // for (int line = Line::ROW; line < Line::LOOP_END; ++line) {
-  //   std::cout << (line == Line::ROW ? "Row:" : "Col:") << '\n';
-  //   for (int i = 1; i <= board_size_[line]; ++i) {
-  //     std::cout << "A ";
-  //     for (int j = 0; j <= 2 * descriptions_(line, i, 0) + 1; ++j) {
-  //       std::cout << A_(line, i, j) << ' ';
-  //     }
-  //     std::cout << '\n';
-  //     std::cout << "B ";
-  //     for (int j = 0; j <= 2 * descriptions_(line, i, 0) + 1; ++j) {
-  //       std::cout << B_(line, i, j) << ' ';
-  //     }
-  //     std::cout << '\n';
-  //   }
-  //   std::cout << '\n';
-  // }
 }
 
-template <typename T>
-int Solver::ParseLine_(std::string l,
-                       typename std::vector<T>::iterator begin,
-                       typename std::vector<T>::iterator end,
-                       std::size_t assign_from) {
-  begin += assign_from - 1;
-  if (begin >= end) return 0;
-
-  int n = 0;
-  int k = 0;
-
-  for (auto it = l.begin(),
-           ie = l.end(); it != ie; ++it) {
-    if (isdigit(*it)) {
-      n = 10 * n + (*it - '0');
-      if (it + 1 == ie || !isdigit(*(it + 1))) {
-        *(++begin) = n;
-        ++k;
-        if (begin >= end) break;
-      }
-    } else
-      n = 0;
-  }
-  return k;
-}
-
-bool Solver::Initialize_() {
-  for (int i = 0; i <= board_size_[Line::ROW]; ++i) {
-    for (int j = 0; j <= board_size_[Line::COL]; ++j) {
-      gram_(i, j) = Block::UNKNOWN;
+void Solver::Initialize_() {
+  for (int line = Line::ROW; line < Line::LOOP_END; ++line) {
+    sum_line_sum_[line] = 0;
+    for (int i = 1; i <= board_size_[line]; ++i) {
+      max_description_lens_[line] = std::max(max_description_lens_[line], descriptions_(line, i, 0));
+      InitializeAt_(line, i);
     }
   }
+
+  if (sum_line_sum_[Line::ROW] == 0 && sum_line_sum_[Line::COL] == 0)
+    throw EmptyDescriptions();
+  if (sum_line_sum_[Line::ROW] != sum_line_sum_[Line::COL])
+    throw IncorrectDescriptions();
+}
+
+void Solver::InitializeAt_(std::size_t line, std::size_t index) {
+  std::size_t k = 2 * descriptions_(line, index, 0) + 1;
+
+  int len = descriptions_(line, index, 0);
+  line_sum_(line, index) = 0;
+  line_upper_sum_(line, index) = len - 1;
+
+  for (int j = 1; j <= len; ++j) {
+    line_sum_(line, index) += descriptions_(line, index, j);
+    sum_line_sum_[line] += descriptions_(line, index, j);
+
+    if (line_sum_(line, index) > board_size_[1 - line])
+      throw Solver::IncorrectDescriptions();
+  }
+  line_upper_sum_(line, index) += line_sum_(line, index);
+
+  offset_(line, index) = (int) board_size_[1 - line] - line_upper_sum_(line, index);
+
   // initialize a_ and b_
-  for (int line = Line::ROW; line < Line::LOOP_END; ++line) {
-    for (int i = 1; i <= board_size_[line]; ++i) {
-      offset_(line, i) = board_size_[1 - line] - line_upper_sum_(line, i);
-      a_(line, i, 0) = 0;
-      a_(line, i, 1) = 0;
-      b_(line, i, 0) = 0;
-      b_(line, i, 1) = offset_(line, i);
-      for (int j = 2; j < 2 * descriptions_(line, i, 0) + 1; ++j) {
-        a_(line, i, j) = j & 1 ? 1 : descriptions_(line, i, j / 2);
-        b_(line, i, j) =
-            j & 1 ? offset_(line, i) + 1 : descriptions_(line, i, j / 2);
-      }
-      a_(line, i, 2 * descriptions_(line, i, 0) + 1) = 0;
-      b_(line, i, 2 * descriptions_(line, i, 0) + 1) = offset_(line, i);
-    }
+  a_(line, index, 0) = 0;
+  a_(line, index, 1) = 0;
+  b_(line, index, 0) = 0;
+  b_(line, index, 1) = offset_(line, index);
+  for (int j = 2; j < k; ++j) {
+    a_(line, index, j) =
+        j & 1 ? 1 : descriptions_(line, index, j / 2);
+    b_(line, index, j) =
+        j & 1 ? offset_(line, index) + 1 : descriptions_(line, index, j / 2);
   }
+  a_(line, index, k) = 0;
+  b_(line, index, k) = offset_(line, index);
+
   // compute A_ and B_
-  for (int line = Line::ROW; line < Line::LOOP_END; ++line) {
-    for (int i = 1; i <= board_size_[line]; ++i) {
-      A_(line, i, 0) = 0;
-      B_(line, i, 0) = 0;
-      for (int j = 1; j <= 2 * descriptions_(line, i, 0) + 1; ++j) {
-        A_(line, i, j) = A_(line, i, j - 1) + a_(line, i, j);
-        B_(line, i, j) = B_(line, i, j - 1) + b_(line, i, j);
-      }
-    }
+  A_(line, index, 0) = 0;
+  B_(line, index, 0) = 0;
+  for (int j = 1; j <= k; ++j) {
+    A_(line, index, j) =
+        A_(line, index, j - 1)
+        + a_(line, index, j);
+    B_(line, index, j) =
+        B_(line, index, j - 1)
+        + b_(line, index, j);
   }
-  return sum_line_sum_[Line::ROW] == sum_line_sum_[Line::COL];
 }
 
 void Solver::FillSimpleBlocks_() {
   std::cout << "Pre-filling...\n";
   for (int line = Line::ROW; line < Line::LOOP_END; ++line) {
     for (int i = 1; i <= board_size_[line]; ++i) {
-      int start = offset_(line, i) + 1, end = 1;
+      int begin = offset_(line, i) + 1, end = 1;
       for (int j = 1; j <= descriptions_(line, i, 0); ++j) {
         end += descriptions_(line, i, j);
         if (descriptions_(line, i, j) > offset_(line, i)) {
-          for (int k = start; k < end; ++k) {
+          for (int k = begin; k < end; ++k) {
             if (line == Line::ROW) {
               gram_(i, k) = Block::BLACK;
             } else if (line == Line::COL) {
@@ -251,29 +237,27 @@ void Solver::FillSimpleBlocks_() {
             }
           }
         }
-        // start = end + offset + 1
         end += 1;
-        start = end +
-            offset_(line, i);  // or start += descriptions[line][i][j] + 1
+        begin = end + offset_(line, i);
       }
     }
   }
 
   // Marking blocks that are in 0-clue's line as blank
-  for (int i = 1; i <= board_size_[Line::ROW]; ++i) {
-    if (line_upper_sum_(Line::ROW, i) == 0) {
-      for (int j = 1; j <= board_size_[Line::COL]; ++j) {
-        gram_(i, j) = Block::BLANK;
+  for (int line = Line::ROW; line < Line::LOOP_END; ++line) {
+    for (int i = 1; i <= board_size_[line]; ++i) {
+      if (line_sum_(line, i) == 0) {
+        for (int j = 1; j <= board_size_[1 - line]; ++j) {
+          if (line == Line::ROW)
+            gram_(i, j) = Block::BLANK;
+          else if (line == Line::COL)
+            gram_(j, i) = Block::BLANK;
+        }
       }
     }
   }
-  for (int j = 1; j <= board_size_[Line::COL]; ++j) {
-    if (line_upper_sum_(Line::COL, j) == 0) {
-      for (int i = 1; i <= board_size_[Line::ROW]; ++i) {
-        gram_(i, j) = Block::BLANK;
-      }
-    }
-  }
+
+  // Get unknown blocks
   for (int i = 1; i <= board_size_[Line::ROW]; ++i) {
     for (int j = 1; j <= board_size_[Line::COL]; ++j) {
       if (gram_(i, j) == Block::UNKNOWN) {
@@ -286,64 +270,74 @@ void Solver::FillSimpleBlocks_() {
             << " blocks are pre-filled, "
             << "and " << unknown_pos_.size()
             << " blocks remain to be filled.\n";
-  // for (int i = 0; i < unknown_pos_.size(); ++i) {
-  //   std::cout << unknown_pos_[i].row << ' ' << unknown_pos_[i].col << '\n';
-  // }
 }
 
-bool Solver::Check_(Solver::Pos pos) {
-  int pp[2] = {pos.row, pos.col};
+bool Solver::IsFixable_(Array2D<bool> &is_fix, std::size_t line, std::size_t index) {
+  if (line != Line::ROW && line != Line::COL) return false;
+  if (index > board_size_[line]) return false;
 
-  for (int line = Line::ROW; line < Line::LOOP_END; ++line) {
-    int l = board_size_[1 - line];
-    int k = 2 * descriptions_(line, pp[line], 0) + 1;
-    int h[Block::LOOP_END] = {0, 0};
+  int l = (int) board_size_[1 - line];
+  int k = 2 * descriptions_(line, index, 0) + 1;
 
-    for (int i = 0; i <= l; ++i) {
-      int block_type;
-      if (line == Line::ROW) {
-        block_type = gram_(pp[line], i);
-      } else { // line == Line::COL
-        block_type = gram_(i, pp[line]);
-      }
-      if (block_type != Block::UNKNOWN) {
-        h[block_type] = i;
-      }
-      L_(Block::BLANK, i) = h[Block::BLACK];
-      L_(Block::BLACK, i) = h[Block::BLANK];
+  is_fix.assign(k + 1, l + 1, false);
+  for (int i = 0; i <= k; ++i) { // initial state
+    if (A_(line, index, i) == 0) {
+      is_fix(i, 0) = true;
     }
-    for (int j = 0; j <= k; ++j) {
-      for (int i = 0; i <= l; ++i) {
-        fix_(j, i) = false;
-      }
-    }
-    for (int i = 0; i <= k; ++i) {
-      if (A_(line, pp[line], i) == 0) {
-        fix_(i, 0) = true;
-      }
-    }
+  }
 
-    int sigma = Block::BLANK;
-    for (int j = 1; j <= k; ++j) {
-      int i_from = std::max(1, A_(line, pp[line], j)),
-          i_to = std::min(l, B_(line, pp[line], j));
-      for (int i = i_from; i <= i_to; ++i) {
-        int p_from =
-            std::max(i - b_(line, pp[line], j),
-                     std::max(A_(line, pp[line], j - 1), L_(sigma, i))),
-            p_to = std::min(i - a_(line, pp[line], j),
-                            B_(line, pp[line], j - 1));
-        for (int p = p_from; p <= p_to; ++p) {
-          if (fix_(j - 1, p)) {
-            fix_(j, i) = true;
-            break;
+  // Compute L_{i}^{\sigma_j}(s)
+  int index_keeper[Block::LOOP_END] = {0, 0};
+  Array2D<int> L(Block::LOOP_END, l + 1);
+  for (int i = 0; i <= l; ++i) {
+    int block_type;
+    block_type = line == Line::ROW ? gram_(index, i) : gram_(i, index);
+    if (block_type != Block::UNKNOWN) {
+      index_keeper[block_type] = i;
+    }
+    L(Block::BLANK, i) = index_keeper[Block::BLACK];
+    L(Block::BLACK, i) = index_keeper[Block::BLANK];
+  }
+
+  int sigma = Block::BLANK;
+  for (int j = 1; j <= k; ++j) {
+    int begin_i = std::max(1, A_(line, index, j)),
+        end_i = std::min(l, B_(line, index, j)) + 1;
+
+    for (int i = begin_i; i < end_i; ++i) {
+      int begin_p = std::max(
+          {
+              i - b_(line, index, j),
+              A_(line, index, j - 1),
+              L(sigma, i)
           }
+      );
+      int end_p = std::min(
+          i - a_(line, index, j),
+          B_(line, index, j - 1)
+      ) + 1;
+
+      for (int p = begin_p; p < end_p; ++p) {
+        if (is_fix(j - 1, p)) {
+          is_fix(j, i) = true;
+          break;
         }
       }
-      sigma = 1 - sigma;
     }
+    sigma = 1 - sigma;
+  }
 
-    if (!fix_(k, l)) return false;
+  return is_fix(k, l);
+}
+
+bool Solver::Check_(Pos pos) {
+  int line2index[2] = {pos.row, pos.col};
+  std::size_t max_size = std::max(board_size_[0], board_size_[1]);
+  std::size_t max_len = std::max(max_description_lens_[0], max_description_lens_[1]);
+
+  Array2D<bool> fix;
+  for (int line = Line::ROW; line < Line::LOOP_END; ++line) {
+    if (!IsFixable_(fix, line, line2index[line])) return false;
   }
 
   return true;

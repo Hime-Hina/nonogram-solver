@@ -12,6 +12,7 @@
 template <typename T>
 class Array2D {
  public:
+  Array2D() = default;
   Array2D(std::size_t rows, std::size_t cols, const T &val = 0)
       : _rows(rows), _cols(cols), _arr(rows * cols, val) {}
   Array2D(const Array2D &arr)
@@ -134,7 +135,7 @@ class Array2D {
   }
 
  private:
-  std::size_t _rows, _cols;
+  std::size_t _rows = 0, _cols = 0;
   std::vector<T> _arr;
 };
 

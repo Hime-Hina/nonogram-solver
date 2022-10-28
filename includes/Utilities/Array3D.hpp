@@ -11,6 +11,7 @@
 template <typename T>
 class Array3D {
  public:
+  Array3D() = default;
   Array3D(std::size_t rows, std::size_t cols, std::size_t aisles, const T &val = 0)
       : _rows(rows),
         _cols(cols),
@@ -179,8 +180,8 @@ class Array3D {
   }
 
  private:
-  std::size_t _rows, _cols, _aisles;
-  std::size_t _offset;
+  std::size_t _rows = 0, _cols = 0, _aisles = 0;
+  std::size_t _offset = 0;
   std::vector<T> _arr;
 };
 

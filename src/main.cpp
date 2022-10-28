@@ -7,9 +7,9 @@ int main() {
 
   Solver nonogram(n, m);
 
-  nonogram.Input();
+  std::cin >> nonogram;
   nonogram.Solve();
-  nonogram.Print(false);
+  std::cout << nonogram;
 
   return 0;
 }
