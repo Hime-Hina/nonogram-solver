@@ -11,6 +11,8 @@
   </component>
   <component name="CMakeRunConfigurationManager">
     <generated>
+      <config projectName="nonogram" targetName="TestArray3D" />
+      <config projectName="nonogram" targetName="Test" />
       <config projectName="nonogram" targetName="solver" />
       <config projectName="nonogram" targetName="TestMaxFlow" />
       <config projectName="nonogram" targetName="TestArray2D" />
@@ -22,12 +24,15 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a1ebc95-220b-46f1-a863-76cc87c8b74a" name="变更" comment="更新CMakeLists">
-      <change afterPath="$PROJECT_DIR$/.idea/codestream.xml" afterDir="false" />
+    <list default="true" id="9a1ebc95-220b-46f1-a863-76cc87c8b74a" name="变更" comment="添加迭代器判断模板">
+      <change beforePath="$PROJECT_DIR$/.idea/codestream.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codestream.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/Solver.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Solver.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/Utilities/Array2D.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Utilities/Array2D.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nonogram.md" beforeDir="false" afterPath="$PROJECT_DIR$/doc/nonogram.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/TestArray2D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/TestArray2D.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/Utilities/Array3D.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/includes/Utilities/Array3D.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/samples/1.in" beforeDir="false" afterPath="$PROJECT_DIR$/samples/1.in" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Solver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Solver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,9 +55,6 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
-  </component>
-  <component name="OptimizeOnSaveOptions">
-    <option name="myRunOnSave" value="true" />
   </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
@@ -79,8 +81,10 @@
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
-    "settings.editor.splitter.proportion": "0.26601425"
+    "rearrange.code.on.save": "true",
+    "settings.editor.selected.configurable": "preferences.sourceCode.C/C++",
+    "settings.editor.splitter.proportion": "0.26601425",
+    "structure.view.defaults.are.configured": "true"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -92,13 +96,18 @@
       <recent name="D:\WorkingSpace\nonogram\src\Utilities" />
     </key>
   </component>
-  <component name="RunManager" selected="CMake 应用程序.TestArray2D">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+  <component name="RunManager" selected="CMake 应用程序.solver">
+    <configuration name="Test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="nonogram" TARGET_NAME="Test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="nonogram" RUN_TARGET_NAME="Test">
       <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="TestArray2D" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="nonogram" TARGET_NAME="TestArray2D" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="nonogram" RUN_TARGET_NAME="TestArray2D">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestArray3D" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="nonogram" TARGET_NAME="TestArray3D" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="nonogram" RUN_TARGET_NAME="TestArray3D">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -115,7 +124,9 @@
     </configuration>
     <list>
       <item itemvalue="CMake 应用程序.solver" />
+      <item itemvalue="CMake 应用程序.Test" />
       <item itemvalue="CMake 应用程序.TestArray2D" />
+      <item itemvalue="CMake 应用程序.TestArray3D" />
       <item itemvalue="CMake 应用程序.TestMaxFlow" />
     </list>
   </component>
@@ -137,7 +148,17 @@
       <workItem from="1666354667679" duration="316000" />
       <workItem from="1666355062872" duration="3650000" />
       <workItem from="1666371430209" duration="17049000" />
-      <workItem from="1666464937825" duration="13032000" />
+      <workItem from="1666464937825" duration="22581000" />
+      <workItem from="1666501956401" duration="2020000" />
+      <workItem from="1666504310859" duration="16748000" />
+      <workItem from="1666579221473" duration="4330000" />
+      <workItem from="1666597473928" duration="2627000" />
+      <workItem from="1666604523646" duration="3000" />
+      <workItem from="1666604559615" duration="2028000" />
+      <workItem from="1666778687405" duration="3593000" />
+      <workItem from="1666835795950" duration="3281000" />
+      <workItem from="1666854894577" duration="5013000" />
+      <workItem from="1666934587602" duration="20191000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <created>1666354025656</created>
@@ -230,7 +251,70 @@
       <option name="project" value="LOCAL" />
       <updated>1666479022521</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="使二维数组的容器构造能自动推导容器类型">
+      <created>1666479226695</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1666479226695</updated>
+    </task>
+    <task id="LOCAL-00015" summary="更改位置">
+      <created>1666479244140</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1666479244140</updated>
+    </task>
+    <task id="LOCAL-00016" summary=".idea">
+      <created>1666479279670</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1666479279670</updated>
+    </task>
+    <task id="LOCAL-00017" summary="增加一些实用模板类；更加泛化的二维数组；完善二维数组的测试">
+      <created>1666540197790</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1666540197790</updated>
+    </task>
+    <task id="LOCAL-00018" summary="增加一些实用模板类；更加泛化的二维数组；完善二维数组的测试">
+      <created>1666540246589</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1666540246589</updated>
+    </task>
+    <task id="LOCAL-00019" summary="增加从原生二维数组初始化的构造函数">
+      <created>1666545790382</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1666545790382</updated>
+    </task>
+    <task id="LOCAL-00020" summary="完善三维数组及测试">
+      <created>1666600095449</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1666600095449</updated>
+    </task>
+    <task id="LOCAL-00021" summary="增加resize和assign成员函数">
+      <created>1666937025550</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1666937025550</updated>
+    </task>
+    <task id="LOCAL-00022" summary="添加迭代器判断模板">
+      <created>1666937050267</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1666937050267</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,7 +342,15 @@
     <MESSAGE value="添加测试类；添加二维数组和最大流的测试；二维数组的容器构造函数泛型化" />
     <MESSAGE value="更新" />
     <MESSAGE value="更新CMakeLists" />
-    <option name="LAST_COMMIT_MESSAGE" value="更新CMakeLists" />
+    <MESSAGE value="使二维数组的容器构造能自动推导容器类型" />
+    <MESSAGE value="更改位置" />
+    <MESSAGE value=".idea" />
+    <MESSAGE value="增加一些实用模板类；更加泛化的二维数组；完善二维数组的测试" />
+    <MESSAGE value="增加从原生二维数组初始化的构造函数" />
+    <MESSAGE value="完善三维数组及测试" />
+    <MESSAGE value="增加resize和assign成员函数" />
+    <MESSAGE value="添加迭代器判断模板" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加迭代器判断模板" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

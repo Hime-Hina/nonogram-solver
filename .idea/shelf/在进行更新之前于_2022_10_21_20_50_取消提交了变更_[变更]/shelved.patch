@@ -1,0 +1,110 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"CMakePresetLoader\">{\r\n  &quot;useNewFormat&quot;: true\r\n}</component>\r\n  <component name=\"CMakeReloadState\">\r\n    <option name=\"reloaded\" value=\"true\" />\r\n  </component>\r\n  <component name=\"CMakeRunConfigurationManager\">\r\n    <generated>\r\n      <config projectName=\"nonogram\" targetName=\"test1\" />\r\n    </generated>\r\n  </component>\r\n  <component name=\"CMakeSettings\">\r\n    <configurations>\r\n      <configuration PROFILE_NAME=\"Debug\" ENABLED=\"true\" CONFIG_NAME=\"Debug\" />\r\n    </configurations>\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"9a1ebc95-220b-46f1-a863-76cc87c8b74a\" name=\"变更\" comment=\"第一次提交\">\r\n      <change afterPath=\"$PROJECT_DIR$/.gitignore\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ClangdSettings\">\r\n    <option name=\"formatViaClangd\" value=\"false\" />\r\n  </component>\r\n  <component name=\"ExecutionTargetManager\" SELECTED_TARGET=\"CMakeBuildProfile:Debug\" />\r\n  <component name=\"FormatOnSaveOptions\">\r\n    <option name=\"myRunOnSave\" value=\"true\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n    <option name=\"RESET_MODE\" value=\"MIXED\" />\r\n  </component>\r\n  <component name=\"MacroExpansionManager\">\r\n    <option name=\"directoryName\" value=\"qx94i52e\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"OptimizeOnSaveOptions\">\r\n    <option name=\"myRunOnSave\" value=\"true\" />\r\n  </component>\r\n  <component name=\"ProjectApplicationVersion\">\r\n    <option name=\"ide\" value=\"CLion\" />\r\n    <option name=\"majorVersion\" value=\"2022\" />\r\n    <option name=\"minorVersion\" value=\"1.3\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2GRNKhfZZ1LU6vYa2EO54JfN3mv\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.cidr.known.project.marker\": \"true\",\r\n    \"WebServerToolWindowFactoryState\": \"false\",\r\n    \"cf.first.check.clang-format\": \"false\",\r\n    \"cidr.known.project.marker\": \"true\",\r\n    \"last_opened_file_path\": \"D:/WorkingSpace/nonogram\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"settings.editor.selected.configurable\": \"preferences.general\",\r\n    \"settings.editor.splitter.proportion\": \"0.26601425\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"D:\\WorkingSpace\\nonogram\\src\\Utilities\" />\r\n      <recent name=\"D:\\WorkingSpace\\nonogram\\includes\\Utilities\" />\r\n      <recent name=\"D:\\WorkingSpace\\nonogram\\src\\Graph\" />\r\n      <recent name=\"D:\\WorkingSpace\\nonogram\\src\" />\r\n      <recent name=\"D:\\WorkingSpace\\nonogram\\includes\\Graph\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"test1\" type=\"CMakeRunConfiguration\" factoryName=\"Application\" REDIRECT_INPUT=\"false\" ELEVATE=\"false\" USE_EXTERNAL_CONSOLE=\"false\" PASS_PARENT_ENVS_2=\"true\" PROJECT_NAME=\"nonogram\" TARGET_NAME=\"test1\" CONFIG_NAME=\"Debug\" RUN_TARGET_PROJECT_NAME=\"nonogram\" RUN_TARGET_NAME=\"test1\">\r\n      <method v=\"2\">\r\n        <option name=\"com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"应用程序级\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"SvnConfiguration\">\r\n    <configuration>C:\\Users\\HimeHina\\AppData\\Roaming\\Subversion</configuration>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"默认任务\">\r\n      <changelist id=\"9a1ebc95-220b-46f1-a863-76cc87c8b74a\" name=\"变更\" comment=\"\" />\r\n      <created>1666347375492</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1666347375492</updated>\r\n      <workItem from=\"1666347377248\" duration=\"164000\" />\r\n      <workItem from=\"1666347554045\" duration=\"2738000\" />\r\n      <workItem from=\"1666350494140\" duration=\"56000\" />\r\n      <workItem from=\"1666350562381\" duration=\"4049000\" />\r\n      <workItem from=\"1666354667679\" duration=\"316000\" />\r\n      <workItem from=\"1666355062872\" duration=\"142000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"第一次提交\">\r\n      <created>1666354025656</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1666354025656</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"第一次提交\">\r\n      <created>1666354043798</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1666354043798</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"3\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"第一次提交\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"第一次提交\" />\r\n  </component>\r\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\r\n    <expand />\r\n    <select />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 7c4eb6587fffda152ebb9ddf4e026166b07002a0)
++++ b/.idea/workspace.xml	(date 1666356445971)
+@@ -20,8 +20,9 @@
+     </configurations>
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="9a1ebc95-220b-46f1-a863-76cc87c8b74a" name="变更" comment="第一次提交">
+-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
++    <list default="true" id="9a1ebc95-220b-46f1-a863-76cc87c8b74a" name="变更" comment="添加.gitignore模板">
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/nonogram.md" beforeDir="false" afterPath="$PROJECT_DIR$/doc/nonogram.md" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -71,17 +72,17 @@
+     "node.js.detected.package.eslint": "true",
+     "node.js.selected.package.eslint": "(autodetect)",
+     "nodejs_package_manager_path": "npm",
+-    "settings.editor.selected.configurable": "preferences.general",
++    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
+     "settings.editor.splitter.proportion": "0.26601425"
+   }
+ }]]></component>
+   <component name="RecentsManager">
+     <key name="MoveFile.RECENT_KEYS">
++      <recent name="D:\WorkingSpace\nonogram\doc" />
+       <recent name="D:\WorkingSpace\nonogram\src\Utilities" />
+       <recent name="D:\WorkingSpace\nonogram\includes\Utilities" />
+       <recent name="D:\WorkingSpace\nonogram\src\Graph" />
+       <recent name="D:\WorkingSpace\nonogram\src" />
+-      <recent name="D:\WorkingSpace\nonogram\includes\Graph" />
+     </key>
+   </component>
+   <component name="RunManager">
+@@ -107,7 +108,7 @@
+       <workItem from="1666350494140" duration="56000" />
+       <workItem from="1666350562381" duration="4049000" />
+       <workItem from="1666354667679" duration="316000" />
+-      <workItem from="1666355062872" duration="142000" />
++      <workItem from="1666355062872" duration="1368000" />
+     </task>
+     <task id="LOCAL-00001" summary="第一次提交">
+       <created>1666354025656</created>
+@@ -123,7 +124,42 @@
+       <option name="project" value="LOCAL" />
+       <updated>1666354043798</updated>
+     </task>
+-    <option name="localTasksCounter" value="3" />
++    <task id="LOCAL-00003" summary="第一次提交">
++      <created>1666355220788</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1666355220788</updated>
++    </task>
++    <task id="LOCAL-00004" summary="第一次提交">
++      <created>1666355234575</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1666355234575</updated>
++    </task>
++    <task id="LOCAL-00005" summary="添加.gitignore">
++      <created>1666355310228</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1666355310228</updated>
++    </task>
++    <task id="LOCAL-00006" summary="README">
++      <created>1666355487324</created>
++      <option name="number" value="00006" />
++      <option name="presentableId" value="LOCAL-00006" />
++      <option name="project" value="LOCAL" />
++      <updated>1666355487324</updated>
++    </task>
++    <task id="LOCAL-00007" summary="添加.gitignore模板">
++      <created>1666355680648</created>
++      <option name="number" value="00007" />
++      <option name="presentableId" value="LOCAL-00007" />
++      <option name="project" value="LOCAL" />
++      <updated>1666355680648</updated>
++    </task>
++    <option name="localTasksCounter" value="8" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -142,7 +178,10 @@
+   </component>
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="第一次提交" />
+-    <option name="LAST_COMMIT_MESSAGE" value="第一次提交" />
++    <MESSAGE value="添加.gitignore" />
++    <MESSAGE value="README" />
++    <MESSAGE value="添加.gitignore模板" />
++    <option name="LAST_COMMIT_MESSAGE" value="添加.gitignore模板" />
+   </component>
+   <component name="XSLT-Support.FileAssociations.UIState">
+     <expand />
+diff --git a/nonogram.md b/doc/nonogram.md
+rename from nonogram.md
+rename to doc/nonogram.md
