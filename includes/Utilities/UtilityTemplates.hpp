@@ -54,4 +54,21 @@ struct is_container<
 template <typename T>
 inline constexpr bool is_container_v = is_container<T>::value;
 
+template <typename T, typename = void>
+struct is_iterator : std::false_type {};
+template <typename T>
+struct is_iterator<
+    T,
+    std::void_t<
+        typename std::iterator_traits<T>::iterator_category,
+        typename std::iterator_traits<T>::difference_type,
+        typename std::iterator_traits<T>::value_type,
+        typename std::iterator_traits<T>::pointer,
+        typename std::iterator_traits<T>::reference
+    >
+> : std::true_type {
+};
+template <typename T>
+inline constexpr bool is_iterator_v = is_iterator<T>::value;
+
 #endif //NONOGRAM_INCLUDES_UTILITIES_UTILITYTEMPLATES_HPP_
