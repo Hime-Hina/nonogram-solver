@@ -7,19 +7,21 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <filesystem>
 
 int GetFileNum(std::string path) {
   path += "\\*.*";
-  struct _finddata_t fileinfo;
+  struct _finddata_t fileinfo{};
   intptr_t handle = _findfirst(path.c_str(), &fileinfo);
   int file_num = 0;
 
   if (handle == -1) return -1;
   while (!_findnext(handle, &fileinfo)) {
-    if (0 == strcmp(fileinfo.name, "..") || _A_SUBDIR == fileinfo.attrib) {
+    std::string file_name(fileinfo.name);
+    if (".." == file_name || _A_SUBDIR == fileinfo.attrib) {
       continue;
     }
-    ++file_num;
+    if (file_name.find(".in") != std::string::npos) ++file_num;
   }
   _findclose(handle);
 
@@ -29,7 +31,7 @@ int GetFileNum(std::string path) {
 int main() {
   using namespace std;
 
-  const string out_path = ".\\samples";
+  const string out_path = "..\\samples";
   const char *digits =
       "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*("
       ")_+";
@@ -41,9 +43,11 @@ int main() {
   auto rnd_size = bind(idist, eng), rnd_block = bind(bdist, eng);
 
   int files_num = GetFileNum(out_path);
-  ofstream fs;
-  fs.open(out_path + "\\" + to_string(files_num + 1) + ".in",
-          ios::out | ios::trunc);
+  ofstream ofs;
+  ofs.open(
+      out_path + "\\" + to_string(files_num + 1) + ".in",
+      ios::out | ios::trunc
+  );
 
   int n = rnd_size(), m = rnd_size();
   vector<vector<bool>> gram(n);
@@ -57,7 +61,7 @@ int main() {
     }
   }
 
-  fs << n << ' ' << m << '\n';
+  ofs << n << ' ' << m << '\n';
   cout << n << ' ' << m << '\n';
 
   int sum[2] = {0, 0};
@@ -68,7 +72,7 @@ int main() {
       if (gram[i][j] == 1) {
         ++consecutive;
         if (j == m - 1 || gram[i][j + 1] == 0) {
-          fs << consecutive << ' ';
+          ofs << consecutive << ' ';
           cout << consecutive << ' ';
           sum[0] += consecutive;
           ++k;
@@ -78,11 +82,11 @@ int main() {
       }
     }
     if (k = 0) cout << '0';
-    fs << '\n';
+    ofs << '\n';
     cout << '\n';
   }
 
-  fs << '\n';
+  ofs << '\n';
   cout << '\n';
 
   for (int j = 0; j < m; ++j) {
@@ -92,7 +96,7 @@ int main() {
       if (gram[i][j] == 1) {
         ++consecutive;
         if (i == n - 1 || gram[i + 1][j] == 0) {
-          fs << consecutive << ' ';
+          ofs << consecutive << ' ';
           cout << consecutive << ' ';
           sum[1] += consecutive;
           ++k;
@@ -102,30 +106,30 @@ int main() {
       }
     }
     if (k == 0) cout << '0';
-    fs << '\n';
+    ofs << '\n';
     cout << '\n';
   }
 
-  fs << '\n';
+  ofs << '\n';
 
-  fs << setw(2) << ' ';
+  ofs << setw(2) << ' ';
   for (int j = 1; j <= m; ++j) {
-    fs << setw(2) << digits[j];
+    ofs << setw(2) << digits[j];
   }
-  fs << '\n';
+  ofs << '\n';
   for (int i = 0; i < n; ++i) {
-    fs << setw(2) << digits[i + 1];
+    ofs << setw(2) << digits[i + 1];
     for (int j = 0; j < m; ++j) {
       if (gram[i][j]) {
-        fs << setw(2) << '@';
+        ofs << setw(2) << '@';
       } else {
-        fs << setw(2) << '.';
+        ofs << setw(2) << '.';
       }
     }
-    fs << '\n';
+    ofs << '\n';
   }
 
-  fs.close();
+  ofs.close();
 
   return 0;
 }
