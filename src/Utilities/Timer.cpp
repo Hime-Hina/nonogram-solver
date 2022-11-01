@@ -11,5 +11,5 @@ Timer::~Timer() {
   using namespace std::chrono;
   _end = high_resolution_clock::now();
   auto time_span = duration_cast<microseconds>(_end - _start);
-  std::cout << "Timer: " << time_span.count() << " um.\n";
+  std::cout << "Timer: " << time_span.count() << " us.\n";
 }
