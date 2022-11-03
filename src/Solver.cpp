@@ -7,6 +7,30 @@
 
 #include "Solver.hpp"
 
+void Solver::Init(std::size_t rows, std::size_t cols) {
+  std::size_t max_size = std::max(rows, cols);
+
+  total_blocks_ = rows * cols;
+  board_size_[0] = rows;
+  board_size_[1] = cols;
+  gram_.assign(rows + 1, cols + 1, Block::UNKNOWN);
+  for (std::size_t i = 0; i < gram_.rows(); ++i) {
+    gram_(i, 0) = Block::BLANK;
+  }
+  descriptions_.resize(
+      Line::LOOP_END,
+      max_size + 1,
+      (max_size + 1) / 2 + 1
+  );
+  line_sum_.resize(Line::LOOP_END, max_size + 1);
+  line_upper_sum_.resize(Line::LOOP_END, max_size + 1);
+  offset_.resize(Line::LOOP_END, max_size + 1);
+  a_.resize(Line::LOOP_END, max_size + 1, max_size + 3);
+  b_.resize(Line::LOOP_END, max_size + 1, max_size + 3);
+  A_.resize(Line::LOOP_END, max_size + 1, max_size + 3);
+  B_.resize(Line::LOOP_END, max_size + 1, max_size + 3);
+}
+
 bool Solver::Solve() {
   try {
     Initialize_();
@@ -17,7 +41,18 @@ bool Solver::Solve() {
 
   Timer t;
   FillSimpleBlocks_();
-  if (DFS_(0)) {
+//  Print();
+//  for (int line = Line::ROW; line < Line::LOOP_END; ++line) {
+//    for (int i = 1; i <= board_size_[line]; ++i) {
+//      auto counter = Settle_(line, i);
+//      for (auto &&el : counter) {
+//        std::cout << std::setw(3) << el;
+//      }
+//      std::cout << std::endl;
+//    }
+//    std::cout << std::endl;
+//  }
+  if (Guess_(0)) {
     std::cout << "A solution is found!\n";
     return true;
   } else {
@@ -292,9 +327,7 @@ bool Solver::IsFixable_(Array2D<bool> &is_fix, std::size_t line, std::size_t ind
   for (int i = 0; i <= l; ++i) {
     int block_type;
     block_type = line == Line::ROW ? gram_(index, i) : gram_(i, index);
-    if (block_type != Block::UNKNOWN) {
-      index_keeper[block_type] = i;
-    }
+    if (block_type != Block::UNKNOWN) index_keeper[block_type] = i;
     L(Block::BLANK, i) = index_keeper[Block::BLACK];
     L(Block::BLACK, i) = index_keeper[Block::BLANK];
   }
@@ -330,11 +363,72 @@ bool Solver::IsFixable_(Array2D<bool> &is_fix, std::size_t line, std::size_t ind
   return is_fix(k, l);
 }
 
+Array<int> Solver::Settle_(std::size_t line, std::size_t index) {
+  if (line != Line::ROW && line != Line::COL) return {};
+  if (index > board_size_[line]) return {};
+
+  int l = (int) board_size_[1 - line];
+  int k = 2 * descriptions_(line, index, 0) + 1;
+
+  Array2D<bool> is_fix(k + 1, l + 1, false);
+  for (int i = 0; i <= k; ++i) { // initial state
+    if (A_(line, index, i) == 0) {
+      is_fix(i, 0) = true;
+    }
+  }
+
+  // Compute L_{i}^{\sigma_j}(s)
+  int index_keeper[Block::LOOP_END] = {0, 0};
+  Array<int> block_line(l + 1);
+  Array2D<int> L(Block::LOOP_END, l + 1);
+  for (int i = 0; i <= l; ++i) {
+    block_line[i] = line == Line::ROW ? gram_(index, i) : gram_(i, index);
+  }
+  for (int i = 0; i <= l; ++i) {
+    if (block_line[i] != Block::UNKNOWN) index_keeper[block_line[i]] = i;
+    L(Block::BLANK, i) = index_keeper[Block::BLACK];
+    L(Block::BLACK, i) = index_keeper[Block::BLANK];
+  }
+
+  Array<int> counter(l + 1, 0);
+  int sigma = Block::BLANK;
+  for (int j = 1; j <= k; ++j) {
+    int begin_i = std::max(1, A_(line, index, j)),
+        end_i = std::min(l, B_(line, index, j)) + 1;
+
+    for (int i = begin_i; i < end_i; ++i) {
+      int begin_p = std::max(
+          {
+              i - b_(line, index, j),
+              A_(line, index, j - 1),
+              L(sigma, i)
+          }
+      );
+      int end_p = std::min(
+          i - a_(line, index, j),
+          B_(line, index, j - 1)
+      ) + 1;
+
+      bool conjunction = false;
+      for (int p = begin_p; p < end_p; ++p) {
+        if (is_fix(j - 1, p)) {
+          conjunction = true;
+          for (int pp = p + 1; pp <= i; ++pp) {
+            if (sigma == Block::BLANK) --counter[pp];
+            else ++counter[pp];
+          }
+        }
+      }
+      is_fix(j, i) = conjunction;
+    }
+    sigma = 1 - sigma;
+  }
+
+  return counter;
+}
+
 bool Solver::Check_(Pos pos) {
   int line2index[2] = {pos.row, pos.col};
-  std::size_t max_size = std::max(board_size_[0], board_size_[1]);
-  std::size_t max_len = std::max(max_description_lens_[0], max_description_lens_[1]);
-
   Array2D<bool> fix;
   for (int line = Line::ROW; line < Line::LOOP_END; ++line) {
     if (!IsFixable_(fix, line, line2index[line])) return false;
@@ -343,13 +437,13 @@ bool Solver::Check_(Pos pos) {
   return true;
 }
 
-bool Solver::DFS_(int index) {
+bool Solver::Guess_(int index) {
   if (index == unknown_pos_.size()) return true;
 
   Pos cur = unknown_pos_[index];
   for (int i = Block::BLANK; i < Block::LOOP_END; ++i) {
     gram_(cur.row, cur.col) = i;
-    if (Check_(cur) and DFS_(index + 1)) return true;
+    if (Check_(cur) and Guess_(index + 1)) return true;
   }
   gram_(cur.row, cur.col) = Block::UNKNOWN;
 

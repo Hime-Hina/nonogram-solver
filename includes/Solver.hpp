@@ -37,7 +37,6 @@ class Solver {
       : total_blocks_(rows * cols),
         board_size_{rows, cols},
         gram_(rows + 1, cols + 1, Block::UNKNOWN),
-//        gram_for_printing_(rows + (cols + 1) / 2, cols + (rows + 1) / 2),
         descriptions_(
             Line::LOOP_END,
             std::max(rows, cols) + 1,
@@ -49,27 +48,13 @@ class Solver {
         a_(Line::LOOP_END, std::max(rows, cols) + 1, std::max(rows, cols) + 3),
         b_(Line::LOOP_END, std::max(rows, cols) + 1, std::max(rows, cols) + 3),
         A_(Line::LOOP_END, std::max(rows, cols) + 1, std::max(rows, cols) + 3),
-        B_(Line::LOOP_END, std::max(rows, cols) + 1, std::max(rows, cols) + 3) {}
-
-  void Init(std::size_t rows, std::size_t cols) {
-    total_blocks_ = rows * cols;
-    board_size_[0] = rows;
-    board_size_[1] = cols;
-    gram_.assign(rows + 1, cols + 1, Block::UNKNOWN);
-//    gram_for_printing_.resize(rows + (cols + 1) / 2, cols + (rows + 1) / 2);
-    descriptions_.resize(
-        Line::LOOP_END,
-        std::max(rows, cols) + 1,
-        (std::max(rows, cols) + 1) / 2 + 1
-    );
-    line_sum_.resize(Line::LOOP_END, std::max(rows, cols) + 1);
-    line_upper_sum_.resize(Line::LOOP_END, std::max(rows, cols) + 1);
-    offset_.resize(Line::LOOP_END, std::max(rows, cols) + 1);
-    a_.resize(Line::LOOP_END, std::max(rows, cols) + 1, std::max(rows, cols) + 3);
-    b_.resize(Line::LOOP_END, std::max(rows, cols) + 1, std::max(rows, cols) + 3);
-    A_.resize(Line::LOOP_END, std::max(rows, cols) + 1, std::max(rows, cols) + 3);
-    B_.resize(Line::LOOP_END, std::max(rows, cols) + 1, std::max(rows, cols) + 3);
+        B_(Line::LOOP_END, std::max(rows, cols) + 1, std::max(rows, cols) + 3) {
+    for (std::size_t i = 0; i < gram_.rows(); ++i) {
+      gram_(i, 0) = Block::BLANK;
+    }
   }
+
+  void Init(std::size_t rows, std::size_t cols);
 
   bool Solve();
 
@@ -133,9 +118,11 @@ class Solver {
 
   bool IsFixable_(Array2D<bool> &is_fix, std::size_t line, std::size_t index);
 
+  Array<int> Settle_(std::size_t line, std::size_t index);
+
   bool Check_(Pos pos);
 
-  bool DFS_(int index);
+  bool Guess_(int index);
 
 };
 
