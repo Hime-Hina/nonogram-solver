@@ -7,31 +7,65 @@
 #include <iostream>
 #include <random>
 #include <vector>
-#include <filesystem>
 
-int GetFileNum(std::string path) {
-  path += "\\*.*";
-  struct _finddata_t fileinfo{};
-  intptr_t handle = _findfirst(path.c_str(), &fileinfo);
-  int file_num = 0;
+class WhiteHole {
+ public:
+  static WhiteHole out;
 
-  if (handle == -1) return -1;
-  while (!_findnext(handle, &fileinfo)) {
-    std::string file_name(fileinfo.name);
-    if (".." == file_name || _A_SUBDIR == fileinfo.attrib) {
-      continue;
-    }
-    if (file_name.find(".in") != std::string::npos) ++file_num;
+  explicit WhiteHole(const std::string &out_path = "..\\samples")
+      : files_num_(GetFileNum(out_path)),
+        out_path_(out_path),
+        ofs(
+            out_path + "\\" + std::to_string(files_num_ + 1) + ".in",
+            std::ios::out | std::ios::trunc
+        ) {}
+
+  void EnableLogger(bool is_logger = true) {
+    is_logger_ = is_logger;
   }
-  _findclose(handle);
 
-  return file_num;
-}
+  template <class T>
+  WhiteHole &operator<<(const T &val) {
+    if (is_logger_) std::cout << val;
+    ofs << val;
+    return *this;
+  }
+
+  ~WhiteHole() {
+    ofs.close();
+  }
+
+ private:
+  bool is_logger_ = true;
+  int files_num_;
+  std::string out_path_;
+  std::ofstream ofs;
+
+  static int GetFileNum(std::string path) {
+    path += "\\*.*";
+    struct _finddata_t fileinfo{};
+    intptr_t handle = _findfirst(path.c_str(), &fileinfo);
+    int file_num = 0;
+
+    if (handle == -1) return -1;
+    while (!_findnext(handle, &fileinfo)) {
+      std::string file_name(fileinfo.name);
+      if (".." == file_name || _A_SUBDIR == fileinfo.attrib) {
+        continue;
+      }
+      if (file_name.find(".in") != std::string::npos) ++file_num;
+    }
+    _findclose(handle);
+
+    return file_num;
+  }
+
+};
+WhiteHole WhiteHole::out;
 
 int main() {
   using namespace std;
 
-  const string out_path = "..\\samples";
   const char *digits =
       "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*("
       ")_+";
@@ -40,16 +74,10 @@ int main() {
   uniform_int_distribution<> bdist(0, 1);
   default_random_engine eng(
       chrono::high_resolution_clock::now().time_since_epoch().count());
-  auto rnd_size = bind(idist, eng), rnd_block = bind(bdist, eng);
+  auto rnd_size = [&idist, &eng] { return idist(eng); };
+  auto rnd_block = [&bdist, &eng] { return bdist(eng); };
 
-  int files_num = GetFileNum(out_path);
-  ofstream ofs;
-  ofs.open(
-      out_path + "\\" + to_string(files_num + 1) + ".in",
-      ios::out | ios::trunc
-  );
-
-  int n = rnd_size(), m = rnd_size();
+  int n = 4/*rnd_size()*/, m = 4/*rnd_size()*/;
   vector<vector<bool>> gram(n);
   for (int i = 0; i < n; ++i) {
     gram[i].resize(m);
@@ -61,8 +89,7 @@ int main() {
     }
   }
 
-  ofs << n << ' ' << m << '\n';
-  cout << n << ' ' << m << '\n';
+  WhiteHole::out << n << ' ' << m << '\n';
 
   int sum[2] = {0, 0};
   for (int i = 0; i < n; ++i) {
@@ -72,8 +99,7 @@ int main() {
       if (gram[i][j] == 1) {
         ++consecutive;
         if (j == m - 1 || gram[i][j + 1] == 0) {
-          ofs << consecutive << ' ';
-          cout << consecutive << ' ';
+          WhiteHole::out << consecutive << ' ';
           sum[0] += consecutive;
           ++k;
         }
@@ -81,13 +107,11 @@ int main() {
         consecutive = 0;
       }
     }
-    if (k = 0) cout << '0';
-    ofs << '\n';
-    cout << '\n';
+    if (k == 0) WhiteHole::out << '0';
+    WhiteHole::out << '\n';
   }
 
-  ofs << '\n';
-  cout << '\n';
+  WhiteHole::out << '\n';
 
   for (int j = 0; j < m; ++j) {
     int k = 0;
@@ -96,8 +120,7 @@ int main() {
       if (gram[i][j] == 1) {
         ++consecutive;
         if (i == n - 1 || gram[i + 1][j] == 0) {
-          ofs << consecutive << ' ';
-          cout << consecutive << ' ';
+          WhiteHole::out << consecutive << ' ';
           sum[1] += consecutive;
           ++k;
         }
@@ -105,31 +128,30 @@ int main() {
         consecutive = 0;
       }
     }
-    if (k == 0) cout << '0';
-    ofs << '\n';
-    cout << '\n';
+    if (k == 0) WhiteHole::out << '0';
+    WhiteHole::out << '\n';
   }
 
-  ofs << '\n';
+  WhiteHole::out.EnableLogger(false);
+  WhiteHole::out << '\n';
 
-  ofs << setw(2) << ' ';
+  WhiteHole::out << setw(2) << ' ';
   for (int j = 1; j <= m; ++j) {
-    ofs << setw(2) << digits[j];
+    WhiteHole::out << setw(2) << digits[j];
   }
-  ofs << '\n';
+  WhiteHole::out << '\n';
   for (int i = 0; i < n; ++i) {
-    ofs << setw(2) << digits[i + 1];
+    WhiteHole::out << setw(2) << digits[i + 1];
     for (int j = 0; j < m; ++j) {
       if (gram[i][j]) {
-        ofs << setw(2) << '@';
+        WhiteHole::out << setw(2) << '@';
       } else {
-        ofs << setw(2) << '.';
+        WhiteHole::out << setw(2) << '.';
       }
     }
-    ofs << '\n';
+    WhiteHole::out << '\n';
   }
-
-  ofs.close();
+  WhiteHole::out.EnableLogger(true);
 
   return 0;
 }
